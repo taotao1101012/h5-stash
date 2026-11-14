@@ -1,0 +1,1431 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>小猪佩奇 · 我们这一家</title>
+<meta name="description" content="一份献给佩奇迷的家庭相册：佩奇、乔治、猪妈妈和猪爸爸的温馨小日子。" />
+<meta name="color-scheme" content="light" />
+<meta name="theme-color" content="#bfe7f4" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23f7a6c6'/%3E%3Cellipse cx='20' cy='34' rx='9' ry='7' fill='%23f49bbf'/%3E%3Ccircle cx='31' cy='24' r='4' fill='%23fff'/%3E%3Ccircle cx='43' cy='22' r='4' fill='%23fff'/%3E%3Ccircle cx='30' cy='25' r='1.8' fill='%233b2b2b'/%3E%3Ccircle cx='42' cy='23' r='1.8' fill='%233b2b2b'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    --pink: #f7a6c6;
+    --pink-deep: #e77ba6;
+    --red: #e45a6d;
+    --blue: #6fb3d9;
+    --blue-deep: #4f93bb;
+    --orange: #f4a261;
+    --orange-deep: #e08a4a;
+    --cream: #fffaf2;
+    --cream-2: #fdf3e4;
+    --ink: #4a3b3b;
+    --ink-soft: #7a6666;
+    --sky: #bfe7f4;
+    --grass: #8fcb6b;
+    --grass-deep: #6fb553;
+    --mud: #a9744f;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --font-round: "Arial Rounded MT Bold", "Hiragino Maru Gothic ProN", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --font-body: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.75;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body.is-locked { overflow: hidden; }
+  h1, h2, h3, p, figure, blockquote { margin: 0; }
+  img, svg { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; }
+  .wrap { width: min(100% - 48px, 980px); margin-inline: auto; }
+  .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+  ::selection { background: #ffd9e8; color: var(--ink); }
+
+  .kicker {
+    font-family: var(--font-round);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    padding: calc(64px + env(safe-area-inset-top, 0px)) 0 calc(18px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(180deg, #a9def0 0%, #d9f1f7 48%, #eef8e6 100%);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(70% 46% at 50% 0%, rgba(255, 255, 255, 0.66), transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .sun {
+    position: absolute;
+    top: calc(env(safe-area-inset-top, 0px) + 16px);
+    right: 7%;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #ffd166;
+    box-shadow: 0 0 0 14px rgba(255, 209, 102, 0.2), 0 0 0 32px rgba(255, 209, 102, 0.1);
+    z-index: 0;
+    animation: sun-breathe 12s ease-in-out infinite;
+  }
+  .cloud {
+    position: absolute;
+    height: 24px;
+    width: 88px;
+    border-radius: 99px;
+    background: #fff;
+    opacity: 0.9;
+    z-index: 0;
+    animation: drift linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    border-radius: 50%;
+    background: #fff;
+  }
+  .cloud::before { left: 14px; width: 38px; height: 38px; }
+  .cloud::after { right: 14px; width: 28px; height: 28px; }
+  .cloud--1 { top: 16%; left: -20%; animation-duration: 78s; animation-delay: -20s; transform: scale(0.9); }
+  .cloud--2 { top: 30%; left: -30%; animation-duration: 104s; animation-delay: -60s; transform: scale(1.25); opacity: 0.75; }
+  .cloud--3 { top: 9%; left: -45%; animation-duration: 92s; animation-delay: -12s; transform: scale(0.65); opacity: 0.85; }
+  @keyframes drift {
+    from { translate: 0 0; }
+    to { translate: 165vw 0; }
+  }
+  @keyframes sun-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .puff {
+    position: absolute;
+    z-index: 0;
+    width: 92px;
+    height: 26px;
+    border-radius: 99px;
+    background: #fff;
+    opacity: 0.75;
+    pointer-events: none;
+  }
+  .puff::before, .puff::after {
+    content: "";
+    position: absolute;
+    bottom: 3px;
+    border-radius: 50%;
+    background: #fff;
+  }
+  .puff::before { left: 16px; width: 34px; height: 34px; }
+  .puff::after { right: 15px; width: 24px; height: 24px; }
+  .puff--a { top: 34%; left: 5%; transform: scale(0.9); }
+  .puff--b { top: 33%; right: 8%; transform: scale(0.66); opacity: 0.55; }
+  .birds {
+    position: absolute;
+    z-index: 1;
+    top: 37%;
+    left: 20%;
+    width: 84px;
+    height: auto;
+    opacity: 0.55;
+    pointer-events: none;
+    animation: birds-drift 7s ease-in-out infinite;
+  }
+  .kite {
+    position: absolute;
+    z-index: 1;
+    top: 46%;
+    right: 6%;
+    width: 92px;
+    height: auto;
+    pointer-events: none;
+    transform-origin: 50% 10%;
+    animation: kite-sway 5.5s ease-in-out infinite;
+  }
+  @keyframes birds-drift {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(10px, -6px); }
+  }
+  @keyframes kite-sway {
+    0%, 100% { transform: rotate(-3deg) translateY(0); }
+    50% { transform: rotate(4deg) translateY(-8px); }
+  }
+  @media (max-width: 360px) {
+    .sun {
+      width: 46px;
+      height: 46px;
+      right: 3%;
+      top: calc(env(safe-area-inset-top, 0px) + 10px);
+    }
+  }
+  @media (max-height: 700px) {
+    .puff--a, .puff--b, .birds, .kite { display: none; }
+  }
+
+  .hero__copy {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 0 24px;
+  }
+  .hero__copy > * { animation: rise 0.9s var(--ease-out) both; }
+  .hero__copy > *:nth-child(1) { animation-delay: 80ms; }
+  .hero__copy > *:nth-child(2) { animation-delay: 180ms; }
+  .hero__copy > *:nth-child(3) { animation-delay: 320ms; }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: none; }
+  }
+  .hero__kicker { color: #4f7f8f; }
+  .hero h1 {
+    margin: 10px 0 0;
+    font-family: var(--font-round);
+    font-weight: 800;
+    font-size: clamp(42px, 12vw, 72px);
+    line-height: 1.12;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .hero h1 em {
+    display: block;
+    margin-bottom: 4px;
+    font-style: normal;
+    font-size: 0.3em;
+    letter-spacing: 0.24em;
+    color: var(--pink-deep);
+    text-indent: 0.24em;
+  }
+  .hero__sub {
+    margin: 18px auto 0;
+    max-width: 20em;
+    font-size: 14.5px;
+    line-height: 1.9;
+    color: #5d6b60;
+  }
+  .hero__scene-wrap {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    padding-top: 22px;
+  }
+  .hero__scene { width: min(100%, 640px); margin: 0 auto; height: auto; }
+  .hero__scroll {
+    position: relative;
+    z-index: 3;
+    margin-top: 4px;
+    text-align: center;
+    font-family: var(--font-round);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: #5d6b60;
+  }
+  .hero__scroll span { display: inline-block; animation: nudge 1.8s ease-in-out infinite; }
+  .hero__scroll span:nth-child(2) { animation-delay: 0.12s; }
+  @keyframes nudge {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+
+  /* ---------- intro strip ---------- */
+  .intro { padding: clamp(56px, 10vw, 92px) 0 clamp(30px, 6vw, 48px); text-align: center; }
+  .intro__line {
+    font-family: var(--font-round);
+    font-weight: 800;
+    font-size: clamp(21px, 4.6vw, 28px);
+    line-height: 1.65;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+  .intro__line b { color: var(--pink-deep); font-weight: inherit; }
+  .intro__meta {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .intro__paws { display: flex; justify-content: center; gap: 10px; margin-top: 26px; }
+  .intro__paws svg { width: 18px; height: 18px; opacity: 0.7; }
+
+  /* ---------- member ---------- */
+  .member { position: relative; padding: clamp(40px, 7vw, 64px) 0 clamp(56px, 10vw, 88px); }
+  .member__grid { display: grid; gap: 30px; align-items: center; }
+  .member__stage { --tint: #ffe6f0; }
+  .stage {
+    position: relative;
+    aspect-ratio: 420 / 360;
+    border-radius: 34px;
+    background: var(--tint);
+    overflow: hidden;
+    box-shadow: 0 34px 60px -42px rgba(74, 59, 59, 0.55);
+    isolation: isolate;
+  }
+  .stage::before {
+    content: "";
+    position: absolute;
+    width: 72%;
+    aspect-ratio: 1;
+    left: 13%;
+    top: 10%;
+    border-radius: 46% 54% 42% 58% / 52% 46% 54% 48%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: rotate(-7deg);
+    z-index: 0;
+  }
+  .stage__props { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+  .character {
+    position: absolute;
+    left: 50%;
+    bottom: 4%;
+    transform: translateX(-50%);
+    width: 58%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    z-index: 2;
+    border-radius: 46% 46% 12% 12%;
+  }
+  .character svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 20px 18px rgba(74, 59, 59, 0.16));
+    animation: bob 3.8s ease-in-out infinite;
+    transform-origin: 50% 100%;
+  }
+  .character.is-hop svg { animation: hop 0.62s var(--spring); }
+  .character:focus-visible { outline: 3px solid var(--ink); outline-offset: 8px; }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(-0.5deg); }
+    50% { transform: translateY(-6px) rotate(0.5deg); }
+  }
+  @keyframes hop {
+    0% { transform: translateY(0) scale(1); }
+    28% { transform: translateY(-30px) scale(1.04, 0.96); }
+    55% { transform: translateY(0) scale(0.96, 1.04); }
+    76% { transform: translateY(-9px) scale(1.01, 0.99); }
+    100% { transform: translateY(0) scale(1); }
+  }
+  .bubble {
+    position: absolute;
+    left: 50%;
+    top: 9px;
+    z-index: 4;
+    width: max-content;
+    max-width: 82%;
+    padding: 9px 16px;
+    box-sizing: border-box;
+    background: #fff;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    font-family: var(--font-round);
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.5;
+    text-align: center;
+    color: var(--ink);
+    opacity: 0;
+    transform: translate(-50%, 8px) scale(0.9);
+    pointer-events: none;
+    transition: opacity 220ms var(--ease-out), transform 260ms var(--spring);
+    box-shadow: 3px 4px 0 rgba(74, 59, 59, 0.1);
+  }
+  .bubble::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    width: 13px;
+    height: 13px;
+    margin-left: -8px;
+    background: #fff;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    transform: rotate(45deg);
+  }
+  .bubble.is-on { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  .stage.is-talking .stage__hint { opacity: 0; transform: translateY(-4px); }
+  .stage__hint {
+    position: absolute;
+    left: 14px;
+    top: 12px;
+    z-index: 3;
+    transition: opacity 160ms var(--ease-out), transform 160ms var(--ease-out);
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.78);
+    font-family: var(--font-round);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    backdrop-filter: blur(4px);
+  }
+  .member__copy { padding: 0 4px; }
+  .member__num {
+    font-family: var(--font-round);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    color: var(--ink-soft);
+  }
+  .member__name {
+    margin-top: 6px;
+    font-family: var(--font-round);
+    font-size: clamp(34px, 7vw, 46px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+  }
+  .member__en {
+    margin-top: 4px;
+    font-family: var(--font-round);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--tone-deep, var(--pink-deep));
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .tags span {
+    padding: 5px 12px;
+    border: 1.5px solid rgba(74, 59, 59, 0.16);
+    border-radius: 999px;
+    background: #fff;
+    font-family: var(--font-round);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .member__quote {
+    position: relative;
+    margin-top: 22px;
+    padding: 14px 18px;
+    background: #fff;
+    border-left: 5px solid var(--tone-deep, var(--pink-deep));
+    border-radius: 6px 18px 18px 18px;
+    font-family: var(--font-round);
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.7;
+    color: var(--ink);
+    box-shadow: 0 16px 30px -26px rgba(74, 59, 59, 0.4);
+  }
+  .member__text {
+    margin-top: 18px;
+    font-size: 15px;
+    line-height: 1.95;
+    color: var(--ink-soft);
+  }
+  .member__secret {
+    margin-top: 16px;
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: var(--ink-soft);
+  }
+  .member__secret b { color: var(--tone-deep, var(--pink-deep)); font-weight: 700; }
+
+  .member--peppa { --tint: #ffe6f0; --tone: var(--pink); --tone-deep: var(--pink-deep); }
+  .member--george { --tint: #e2f4fa; --tone: var(--blue); --tone-deep: var(--blue-deep); }
+  .member--mummy { --tint: #ffeeda; --tone: var(--orange); --tone-deep: var(--orange-deep); }
+  .member--daddy { --tint: #e8edfc; --tone: #5b8def; --tone-deep: #3f6fd0; }
+  .member--peppa .stage { background: linear-gradient(160deg, #ffe9f2 0%, #ffd7e8 100%); }
+  .member--george .stage { background: linear-gradient(160deg, #e7f7fb 0%, #cfedf7 100%); }
+  .member--mummy .stage { background: linear-gradient(160deg, #fff0de 0%, #ffe0c2 100%); }
+  .member--daddy .stage { background: linear-gradient(160deg, #edf1ff 0%, #dbe4fb 100%); }
+
+  @media (min-width: 820px) {
+    .member__grid { grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 72px); }
+    .member--george .member__stage, .member--daddy .member__stage { order: 2; }
+    .stage { border-radius: 42px; }
+    .character { width: 60%; }
+    .stage__hint { left: 18px; top: 16px; }
+  }
+
+  /* ---------- moments ---------- */
+  .moments {
+    position: relative;
+    padding: clamp(56px, 9vw, 92px) 0 clamp(64px, 10vw, 104px);
+    background: linear-gradient(180deg, #eef8e6 0%, #e2f4f8 100%);
+    border-radius: 48px 48px 0 0;
+  }
+  .moments__head { text-align: center; max-width: 36em; margin: 0 auto 34px; }
+  .moments__title {
+    margin-top: 8px;
+    font-family: var(--font-round);
+    font-size: clamp(30px, 6.4vw, 42px);
+    font-weight: 800;
+    line-height: 1.2;
+  }
+  .moments__lede { margin-top: 10px; font-size: 14px; color: #5d7268; }
+  .moments__grid { display: grid; gap: 20px; }
+  .postcard {
+    padding: 12px 12px 18px;
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 28px 44px -34px rgba(74, 59, 59, 0.55);
+    transform: rotate(-1.2deg);
+  }
+  .postcard:nth-child(2) { transform: rotate(1deg); }
+  .postcard:nth-child(3) { transform: rotate(-0.6deg); }
+  .postcard svg { width: 100%; height: auto; border-radius: 13px; }
+  .postcard h3 {
+    margin: 12px 6px 0;
+    font-family: var(--font-round);
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .postcard p { margin: 4px 6px 0; font-size: 12.5px; line-height: 1.75; color: var(--ink-soft); }
+  @media (min-width: 760px) {
+    .moments__grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .postcard { border-radius: 26px; }
+  }
+
+  /* ---------- finale ---------- */
+  .finale {
+    position: relative;
+    padding: clamp(66px, 11vw, 110px) 0 calc(30px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(180deg, #e2f4f8 0%, #ffeaf1 46%, #ffe2c9 100%);
+    overflow: hidden;
+    text-align: center;
+  }
+  .finale__head { position: relative; z-index: 2; }
+  .finale h2 {
+    margin-top: 8px;
+    font-family: var(--font-round);
+    font-size: clamp(38px, 9vw, 58px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: 0.03em;
+  }
+  .finale h2 em { font-style: normal; color: var(--pink-deep); }
+  .finale__lede {
+    max-width: 24em;
+    margin: 14px auto 0;
+    font-size: 15px;
+    line-height: 1.9;
+    color: #6b5a54;
+  }
+  .finale__frame {
+    position: relative;
+    z-index: 2;
+    width: min(100% - 40px, 620px);
+    margin: 28px auto 0;
+    padding: 10px 10px 0;
+    background: #fffdf8;
+    border-radius: 22px;
+    box-shadow: 0 40px 70px -40px rgba(74, 59, 59, 0.55);
+    transform: rotate(-0.8deg);
+  }
+  .finale__frame::before, .finale__frame::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    width: 68px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(74, 59, 59, 0.08);
+    transform: rotate(-6deg);
+  }
+  .finale__frame::before { left: 20px; }
+  .finale__frame::after { right: 20px; transform: rotate(6deg); }
+  .finale__art {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #c7eaf7 0%, #e9f7e6 52%, #cfe9b1 100%);
+  }
+  .finale__scene { width: 100%; height: auto; }
+  .finale__caption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 6px 12px;
+    font-family: var(--font-round);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+  }
+  .finale__caption b { color: var(--pink-deep); font-weight: 800; }
+  .finale__actions { position: relative; z-index: 2; margin-top: 26px; }
+  .jump-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 14px 28px;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    background: var(--pink);
+    color: var(--ink);
+    font-family: var(--font-round);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    touch-action: manipulation;
+    box-shadow: 0 6px 0 var(--ink);
+    transition: transform 140ms var(--ease-out), box-shadow 140ms var(--ease-out), background-color 160ms ease;
+  }
+  .jump-btn:hover { background: #ffb6d2; }
+  .jump-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--ink); }
+  .jump-btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 5px; }
+  .jump-btn span { font-size: 18px; line-height: 1; }
+  .finale__foot {
+    position: relative;
+    z-index: 2;
+    margin-top: 34px;
+    padding-top: 18px;
+    border-top: 1px dashed rgba(74, 59, 59, 0.18);
+    font-size: 11px;
+    line-height: 1.9;
+    color: #8a756b;
+  }
+  .finale__foot a { color: inherit; text-underline-offset: 3px; }
+
+  .finale__pig { transform-box: fill-box; transform-origin: 50% 100%; }
+  .finale.is-on .finale__pig { animation: pig-jump 0.9s var(--spring) both; }
+  .finale.is-on .finale__pig:nth-of-type(2) { animation-delay: 70ms; }
+  .finale.is-on .finale__pig:nth-of-type(3) { animation-delay: 140ms; }
+  .finale.is-on .finale__pig:nth-of-type(4) { animation-delay: 210ms; }
+  @keyframes pig-jump {
+    0% { transform: translateY(0) scale(1); }
+    30% { transform: translateY(-26px) scale(1.03, 0.97); }
+    58% { transform: translateY(0) scale(0.97, 1.03); }
+    78% { transform: translateY(-8px); }
+    100% { transform: none; }
+  }
+
+  .confetti-layer, .splash-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: inherit;
+  }
+  .confetti {
+    position: absolute;
+    top: -6%;
+    width: 9px;
+    height: 13px;
+    border-radius: 2px;
+    opacity: 0;
+    animation: confetti-fall var(--t, 2.8s) linear var(--delay, 0s) forwards;
+  }
+  @keyframes confetti-fall {
+    0% { opacity: 0; transform: translate3d(0, -20px, 0) rotate(0deg); }
+    8% { opacity: 1; }
+    100% { opacity: 1; transform: translate3d(var(--x, 0px), 420px, 0) rotate(var(--r, 300deg)); }
+  }
+  .splash {
+    position: absolute;
+    bottom: 22%;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--mud);
+    opacity: 0;
+    animation: splash-up 0.75s var(--ease-out) forwards;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes splash-up {
+    0% { opacity: 1; transform: translate(0, 0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--x, 0px), var(--y, -80px)) scale(0.4); }
+  }
+
+  /* ---------- reveal ---------- */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+  [data-reveal].is-in { opacity: 1; transform: none; }
+  .member__stage[data-reveal] { transform: translateY(30px) rotate(-1deg); }
+  .member__stage[data-reveal].is-in { transform: none; }
+
+  /* ---------- reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .sun, .cloud, .birds, .kite, .character svg, .hero__scroll span { animation: none !important; }
+    .hero__copy > * { animation: none !important; opacity: 1 !important; transform: none !important; }
+    .character.is-hop svg { animation: none !important; }
+    [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .finale.is-on .finale__pig { animation: none !important; }
+    .bubble { transition: opacity 120ms linear; }
+    .confetti, .splash { display: none !important; }
+  }
+
+  /* ---------- narrow phones ---------- */
+  @media (max-width: 360px) {
+    .wrap { width: calc(100% - 36px); }
+    .hero h1 { font-size: 38px; }
+    .hero__sub { font-size: 13.5px; }
+    .stage__hint { left: 10px; top: 9px; font-size: 9px; }
+    .member__quote { font-size: 14px; }
+    .jump-btn { padding: 13px 22px; font-size: 14px; }
+  }
+</style>
+<noscript><style>[data-reveal]{opacity:1!important;transform:none!important}.finale__pig{animation:none!important}</style></noscript>
+</head>
+<body>
+
+<svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- ============ Peppa ============ -->
+    <g id="pig-peppa">
+      <path d="M158 198c16 3 22-7 14-12-5-4-12 1-9 6" fill="none" stroke="#ec8fb0" stroke-width="5" stroke-linecap="round" />
+      <path d="M94 220v22M126 220v22" stroke="#f2a0bf" stroke-width="13" stroke-linecap="round" />
+      <ellipse cx="90" cy="249" rx="15" ry="8" fill="#3b2b2b" />
+      <ellipse cx="130" cy="249" rx="15" ry="8" fill="#3b2b2b" />
+      <path d="M82 134c0-6 4-9 10-9h40c6 0 10 3 10 9l14 70c2 10-3 14-11 16-16 4-40 4-56 0-8-2-13-6-11-16z" fill="#e45a6d" />
+      <path d="M76 201c19 7 51 7 70 0" fill="none" stroke="#d24a5d" stroke-width="3" opacity="0.5" />
+      <path d="M86 150c-14 8-22 20-25 34" fill="none" stroke="#f2a0bf" stroke-width="11" stroke-linecap="round" />
+      <circle cx="60" cy="188" r="8" fill="#f2a0bf" />
+      <path d="M138 150c14-10 24-26 28-40" fill="none" stroke="#f2a0bf" stroke-width="11" stroke-linecap="round" />
+      <circle cx="170" cy="104" r="8" fill="#f2a0bf" />
+      <ellipse cx="108" cy="88" rx="49" ry="45" fill="#f7a6c6" />
+      <path d="M98 47c-4-9-11-13-16-9-4 3-2 11 3 16" fill="#f7a6c6" />
+      <path d="M126 45c3-9 10-13 15-9 4 3 2 10-2 15" fill="#f7a6c6" />
+      <ellipse cx="60" cy="100" rx="23" ry="17" fill="#f49bbf" />
+      <ellipse cx="49" cy="96" rx="3.2" ry="4.6" fill="#c96a8a" />
+      <ellipse cx="58" cy="96" rx="3.2" ry="4.6" fill="#c96a8a" />
+      <circle cx="92" cy="66" r="9.5" fill="#fff" />
+      <circle cx="112" cy="62" r="9.5" fill="#fff" />
+      <circle cx="89" cy="67" r="4" fill="#3b2b2b" />
+      <circle cx="109" cy="63" r="4" fill="#3b2b2b" />
+      <path d="M74 108c8 11 20 13 30 7" fill="none" stroke="#a94c6b" stroke-width="3.4" stroke-linecap="round" />
+      <ellipse cx="84" cy="96" rx="7" ry="4" fill="#ef8fb1" opacity="0.55" />
+    </g>
+
+    <!-- ============ George ============ -->
+    <g id="pig-george">
+      <path d="M150 190c14 3 19-5 12-10-5-4-11 1-8 5" fill="none" stroke="#ec8fb0" stroke-width="5" stroke-linecap="round" />
+      <path d="M96 204v18M126 204v18" stroke="#f2a0bf" stroke-width="12" stroke-linecap="round" />
+      <ellipse cx="93" cy="228" rx="14" ry="7.5" fill="#3b2b2b" />
+      <ellipse cx="129" cy="228" rx="14" ry="7.5" fill="#3b2b2b" />
+      <path d="M88 142c0-5 4-8 9-8h30c5 0 9 3 9 8l10 48c1 7-3 10-9 11-12 3-30 3-42 0-6-1-10-4-9-11z" fill="#6fb3d9" />
+      <g>
+        <path d="M58 206c-13 2-20-5-15-11 4-5 11-1 12 5" fill="#6fbf73" />
+        <ellipse cx="88" cy="194" rx="25" ry="16" fill="#7cc47a" />
+        <circle cx="60" cy="180" r="15" fill="#7cc47a" />
+        <path d="M66 170l5-10 4 11M79 167l5-10 4 11M92 168l5-10 4 11" fill="#479a4f" />
+        <circle cx="56" cy="177" r="3.1" fill="#2f3b2f" />
+        <path d="M45 186c5 4 11 4 15 1" fill="none" stroke="#2f3b2f" stroke-width="2" stroke-linecap="round" />
+        <path d="M50 192l2 2M58 192l2 2" stroke="#2f3b2f" stroke-width="1.6" stroke-linecap="round" />
+        <ellipse cx="80" cy="212" rx="7" ry="4" fill="#5aa55e" />
+        <ellipse cx="98" cy="212" rx="7" ry="4" fill="#5aa55e" />
+      </g>
+      <path d="M94 156c-9 8-14 18-14 27" fill="none" stroke="#f2a0bf" stroke-width="10" stroke-linecap="round" />
+      <path d="M138 156c5 9 6 18 4 25" fill="none" stroke="#f2a0bf" stroke-width="10" stroke-linecap="round" />
+      <ellipse cx="110" cy="104" rx="44" ry="40" fill="#f7a6c6" />
+      <path d="M101 67c-4-8-10-12-15-8-4 3-2 10 2 15" fill="#f7a6c6" />
+      <path d="M128 65c3-8 9-12 14-8 4 3 2 9-2 14" fill="#f7a6c6" />
+      <ellipse cx="64" cy="116" rx="20" ry="15" fill="#f49bbf" />
+      <ellipse cx="54" cy="113" rx="2.8" ry="4" fill="#c96a8a" />
+      <ellipse cx="62" cy="113" rx="2.8" ry="4" fill="#c96a8a" />
+      <circle cx="94" cy="86" r="9" fill="#fff" />
+      <circle cx="112" cy="83" r="9" fill="#fff" />
+      <circle cx="91" cy="87" r="3.8" fill="#3b2b2b" />
+      <circle cx="109" cy="84" r="3.8" fill="#3b2b2b" />
+      <path d="M78 124c7 9 17 11 26 6" fill="none" stroke="#a94c6b" stroke-width="3.2" stroke-linecap="round" />
+      <rect x="92" y="129" width="8" height="7" rx="2" fill="#fff" />
+      <ellipse cx="84" cy="112" rx="6" ry="3.6" fill="#ef8fb1" opacity="0.55" />
+    </g>
+
+    <!-- ============ Mummy ============ -->
+    <g id="pig-mummy">
+      <path d="M158 216c16 3 22-7 14-12-5-4-12 1-9 6" fill="none" stroke="#ec8fb0" stroke-width="5" stroke-linecap="round" />
+      <path d="M98 248v22M126 248v22" stroke="#f2a0bf" stroke-width="13" stroke-linecap="round" />
+      <ellipse cx="94" cy="276" rx="15" ry="8" fill="#3b2b2b" />
+      <ellipse cx="130" cy="276" rx="15" ry="8" fill="#3b2b2b" />
+      <path d="M78 124c0-6 5-10 12-10h40c7 0 12 4 12 10l16 108c1 9-4 13-12 15-18 3-46 3-64 0-8-2-13-6-12-15z" fill="#f4a261" />
+      <path d="M72 234c21 7 57 7 78 0" fill="none" stroke="#e08a4a" stroke-width="3" opacity="0.55" />
+      <path d="M82 148c-14 10-18 28-8 40" fill="none" stroke="#f2a0bf" stroke-width="11" stroke-linecap="round" />
+      <circle cx="74" cy="191" r="8" fill="#f2a0bf" />
+      <path d="M140 148c14-10 22-26 26-40" fill="none" stroke="#f2a0bf" stroke-width="11" stroke-linecap="round" />
+      <circle cx="170" cy="102" r="8" fill="#f2a0bf" />
+      <ellipse cx="108" cy="70" rx="49" ry="45" fill="#f7a6c6" />
+      <path d="M98 29c-4-9-11-13-16-9-4 3-2 11 3 16" fill="#f7a6c6" />
+      <path d="M126 27c3-9 10-13 15-9 4 3 2 10-2 15" fill="#f7a6c6" />
+      <ellipse cx="58" cy="82" rx="23" ry="17" fill="#f49bbf" />
+      <ellipse cx="47" cy="78" rx="3.2" ry="4.6" fill="#c96a8a" />
+      <ellipse cx="56" cy="78" rx="3.2" ry="4.6" fill="#c96a8a" />
+      <circle cx="92" cy="48" r="9.5" fill="#fff" />
+      <circle cx="112" cy="44" r="9.5" fill="#fff" />
+      <circle cx="89" cy="49" r="4" fill="#3b2b2b" />
+      <circle cx="109" cy="45" r="4" fill="#3b2b2b" />
+      <path d="M83 42l-6-5M86 39l-5-6M89 37l-4-6" stroke="#3b2b2b" stroke-width="2" stroke-linecap="round" />
+      <path d="M74 90c8 11 20 13 30 7" fill="none" stroke="#a94c6b" stroke-width="3.4" stroke-linecap="round" />
+      <ellipse cx="84" cy="78" rx="7" ry="4" fill="#ef8fb1" opacity="0.55" />
+    </g>
+
+    <!-- ============ Daddy ============ -->
+    <g id="pig-daddy">
+      <path d="M160 218c16 3 22-7 14-12-5-4-12 1-9 6" fill="none" stroke="#ec8fb0" stroke-width="5" stroke-linecap="round" />
+      <path d="M98 252v22M128 252v22" stroke="#f2a0bf" stroke-width="14" stroke-linecap="round" />
+      <ellipse cx="94" cy="280" rx="16" ry="8.5" fill="#3b2b2b" />
+      <ellipse cx="132" cy="280" rx="16" ry="8.5" fill="#3b2b2b" />
+      <path d="M76 124c0-7 5-11 12-11h44c7 0 12 4 13 11l16 100c1 10-4 15-14 17-18 3-42 3-60 0-10-2-15-7-13-17z" fill="#5b8def" />
+      <ellipse cx="112" cy="208" rx="31" ry="23" fill="#fff" opacity="0.14" />
+      <path d="M80 152c-12 12-16 26-14 40" fill="none" stroke="#f2a0bf" stroke-width="11" stroke-linecap="round" />
+      <circle cx="66" cy="194" r="8" fill="#f2a0bf" />
+      <path d="M140 152c8 14 10 28 8 40" fill="none" stroke="#f2a0bf" stroke-width="11" stroke-linecap="round" />
+      <circle cx="148" cy="194" r="8" fill="#f2a0bf" />
+      <ellipse cx="108" cy="78" rx="49" ry="44" fill="#f7a6c6" />
+      <path d="M98 37c-4-9-11-13-16-9-4 3-2 11 3 16" fill="#f7a6c6" />
+      <path d="M126 35c3-9 10-13 15-9 4 3 2 10-2 15" fill="#f7a6c6" />
+      <ellipse cx="58" cy="90" rx="23" ry="17" fill="#f49bbf" />
+      <ellipse cx="47" cy="86" rx="3.2" ry="4.6" fill="#c96a8a" />
+      <ellipse cx="56" cy="86" rx="3.2" ry="4.6" fill="#c96a8a" />
+      <circle cx="88" cy="58" r="9.5" fill="#fff" />
+      <circle cx="112" cy="54" r="9.5" fill="#fff" />
+      <circle cx="85" cy="59" r="4" fill="#3b2b2b" />
+      <circle cx="109" cy="55" r="4" fill="#3b2b2b" />
+      <circle cx="88" cy="58" r="14" fill="none" stroke="#3b2b2b" stroke-width="3" />
+      <circle cx="112" cy="54" r="14" fill="none" stroke="#3b2b2b" stroke-width="3" />
+      <path d="M102 57l-4-1" stroke="#3b2b2b" stroke-width="3" stroke-linecap="round" />
+      <path d="M74 98c8 11 20 13 30 7" fill="none" stroke="#a94c6b" stroke-width="3.4" stroke-linecap="round" />
+      <ellipse cx="84" cy="86" rx="7" ry="4" fill="#ef8fb1" opacity="0.55" />
+    </g>
+  </defs>
+</svg>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="sun" aria-hidden="true"></div>
+  <div class="cloud cloud--1" aria-hidden="true"></div>
+  <div class="cloud cloud--2" aria-hidden="true"></div>
+  <div class="cloud cloud--3" aria-hidden="true"></div>
+  <div class="puff puff--a" aria-hidden="true"></div>
+  <div class="puff puff--b" aria-hidden="true"></div>
+  <svg class="birds" viewBox="0 0 90 50" aria-hidden="true">
+    <g fill="none" stroke="#5d7f8a" stroke-width="2.4" stroke-linecap="round">
+      <path d="M4 24c6-7 12-7 18 0" />
+      <path d="M32 14c5-6 10-6 15 0" />
+      <path d="M58 30c5-6 10-6 15 0" />
+    </g>
+  </svg>
+  <svg class="kite" viewBox="0 0 120 190" aria-hidden="true">
+    <path d="M60 92c-8 26 8 34-4 54-8 14 2 22-4 32" fill="none" stroke="#8a756b" stroke-width="1.6" stroke-dasharray="3 5" stroke-linecap="round" />
+    <path d="M60 8 94 52 60 96 26 52Z" fill="#f7a6c6" stroke="#4a3b3b" stroke-width="3" stroke-linejoin="round" />
+    <path d="M60 8 60 96M26 52h68" stroke="#4a3b3b" stroke-width="2" opacity="0.55" />
+    <path d="M60 8 26 52 60 52Z" fill="#ffd166" opacity="0.9" />
+    <path d="M60 52 94 52 60 96Z" fill="#6fb3d9" opacity="0.85" />
+    <path d="M52 108c10-6 8 8 18 2M56 130c10-6 8 8 18 2M51 152c10-6 8 8 18 2" fill="none" stroke="#e45a6d" stroke-width="3" stroke-linecap="round" />
+  </svg>
+
+  <div class="hero__copy">
+    <p class="hero__kicker kicker">A Little Family Album</p>
+    <h1><em>小猪佩奇</em>我们这一家</h1>
+    <p class="hero__sub">雨停了，泥坑还在。<br />四只小猪的故事，从一阵笑声开始。</p>
+  </div>
+
+  <div class="hero__scene-wrap">
+    <svg class="hero__scene" viewBox="0 0 390 270" role="img" aria-label="佩奇一家站在雨后的山坡上">
+      <path d="M0 196c64-32 132-32 196-4 58-28 126-30 194-2v80H0z" fill="#cfe8b5" />
+      <path d="M0 178c58 4 86 22 120 26 20 2 34-18 52-24 26-9 52 16 78 26 40 16 84 12 140-2v66H0z" fill="#a9d98a" opacity="0.7" />
+      <g opacity="0.9">
+        <g transform="translate(26 200)">
+          <path d="M0 0c3-10 4-18 2-26M12 0c2-8 1-15-2-22M24 0c3-9 4-16 2-24" stroke="#6fb553" stroke-width="3" stroke-linecap="round" fill="none" />
+          <circle cx="2" cy="-28" r="4" fill="#fff" />
+          <circle cx="-4" cy="-22" r="4" fill="#fff" />
+          <circle cx="26" cy="-26" r="4" fill="#fff" />
+        </g>
+        <g transform="translate(338 198)">
+          <path d="M0 0c3-10 4-18 2-26M12 0c2-8 1-15-2-22" stroke="#6fb553" stroke-width="3" stroke-linecap="round" fill="none" />
+          <circle cx="2" cy="-28" r="4" fill="#fff" />
+          <circle cx="14" cy="-24" r="4" fill="#fff" />
+        </g>
+      </g>
+      <g class="hero__family">
+        <use href="#pig-mummy" transform="translate(4 74) scale(0.46)" />
+        <use href="#pig-daddy" transform="translate(98 60) scale(0.5)" />
+        <use href="#pig-peppa" transform="translate(200 82) scale(0.46)" />
+        <use href="#pig-george" transform="translate(292 106) scale(0.4)" />
+      </g>
+      <path d="M0 214c66-20 134-20 202 2 58-16 126-18 188-2v56H0z" fill="#8fcb6b" />
+      <ellipse cx="326" cy="236" rx="34" ry="9" fill="#8a5a3c" opacity="0.75" />
+      <ellipse cx="326" cy="233" rx="22" ry="5" fill="#a9744f" />
+      <circle cx="312" cy="228" r="3" fill="#c99668" />
+      <g fill="#ffd166">
+        <circle cx="72" cy="236" r="3" />
+        <circle cx="86" cy="242" r="2.4" />
+        <circle cx="60" cy="244" r="2.4" />
+      </g>
+      <g fill="none" stroke="#fff" stroke-width="2" opacity="0.7">
+        <path d="M116 74c6-6 12-6 18 0M150 90c4-4 8-4 12 0" />
+      </g>
+    </svg>
+  </div>
+
+  <p class="hero__scroll"><span>往下走，认识我们一家</span> <span>↓</span></p>
+</header>
+
+<!-- ================= INTRO ================= -->
+<section class="intro wrap">
+  <p class="intro__line" data-reveal>一家人，就是一起把普通的下午<br /><b>过成值得记住的日子。</b></p>
+  <p class="intro__meta" data-reveal style="--d:80ms">四只小猪 · 一个屋顶 · 很多很多笑声</p>
+  <div class="intro__paws" data-reveal style="--d:120ms" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="#f7a6c6"><circle cx="7" cy="8" r="3" /><circle cx="15" cy="6" r="2.6" /><circle cx="18" cy="13" r="2.4" /><ellipse cx="11" cy="15" rx="6" ry="5" /></svg>
+    <svg viewBox="0 0 24 24" fill="#6fb3d9"><circle cx="7" cy="8" r="3" /><circle cx="15" cy="6" r="2.6" /><circle cx="18" cy="13" r="2.4" /><ellipse cx="11" cy="15" rx="6" ry="5" /></svg>
+    <svg viewBox="0 0 24 24" fill="#f4a261"><circle cx="7" cy="8" r="3" /><circle cx="15" cy="6" r="2.6" /><circle cx="18" cy="13" r="2.4" /><ellipse cx="11" cy="15" rx="6" ry="5" /></svg>
+    <svg viewBox="0 0 24 24" fill="#5b8def"><circle cx="7" cy="8" r="3" /><circle cx="15" cy="6" r="2.6" /><circle cx="18" cy="13" r="2.4" /><ellipse cx="11" cy="15" rx="6" ry="5" /></svg>
+  </div>
+</section>
+
+<!-- ================= PEPPA ================= -->
+<section class="member member--peppa" id="peppa">
+  <div class="wrap member__grid">
+    <div class="member__stage" data-reveal>
+      <div class="stage">
+        <svg class="stage__props" viewBox="0 0 420 360" aria-hidden="true">
+          <ellipse cx="210" cy="330" rx="186" ry="28" fill="#fff" opacity="0.38" />
+          <ellipse cx="316" cy="314" rx="66" ry="19" fill="#a9744f" />
+          <ellipse cx="316" cy="310" rx="66" ry="19" fill="#bc8a5e" />
+          <ellipse cx="316" cy="310" rx="45" ry="11" fill="#d8ab7c" opacity="0.6" />
+          <circle cx="290" cy="303" r="4" fill="#e9c79f" />
+          <circle cx="336" cy="301" r="3" fill="#e9c79f" />
+          <path d="M276 292c3-6 8-8 12-6" stroke="#e9c79f" stroke-width="3" fill="none" stroke-linecap="round" />
+          <g transform="translate(34 300)">
+            <path d="M0 0v-20M10 0v-2" stroke="#6fb553" stroke-width="3" stroke-linecap="round" />
+            <circle cx="0" cy="-24" r="6" fill="#fff" /><circle cx="0" cy="-24" r="2" fill="#ffd166" />
+            <circle cx="10" cy="-6" r="5" fill="#fff" /><circle cx="10" cy="-6" r="1.8" fill="#ffd166" />
+          </g>
+          <g transform="translate(376 318)" fill="#fff">
+            <circle cx="0" cy="0" r="4" /><circle cx="9" cy="-4" r="3.4" /><circle cx="-8" cy="-5" r="3.4" />
+          </g>
+        </svg>
+        <button class="character" type="button" data-say="我最喜欢在泥坑里跳来跳去！" aria-label="戳一下佩奇">
+          <svg viewBox="0 0 220 300" aria-hidden="true"><use href="#pig-peppa" /></svg>
+        </button>
+        <div class="bubble" role="status" aria-live="polite"></div>
+        <span class="stage__hint" aria-hidden="true">戳一下</span>
+      </div>
+    </div>
+    <div class="member__copy">
+      <p class="member__num" data-reveal>01 · 姐姐</p>
+      <h2 class="member__name" data-reveal style="--d:40ms">佩奇</h2>
+      <p class="member__en" data-reveal style="--d:60ms">Peppa Pig · 4岁</p>
+      <div class="tags" data-reveal style="--d:80ms">
+        <span>爱跳泥坑</span><span>有点小霸道</span><span>心很软</span>
+      </div>
+      <blockquote class="member__quote" data-reveal style="--d:100ms">“我最喜欢在泥坑里跳来跳去！”</blockquote>
+      <p class="member__text" data-reveal style="--d:120ms">四岁的佩奇是家里的姐姐。她喜欢指挥弟弟，喜欢把每件事都安排成自己的游戏，也喜欢在泥坑里蹦得最高。她笑起来很大声，闯祸了会认真说对不起，然后拉着乔治再跳一次。</p>
+      <p class="member__secret" data-reveal style="--d:140ms"><b>她的小秘密：</b>泰迪熊要放在枕头左边，才睡得着。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GEORGE ================= -->
+<section class="member member--george" id="george">
+  <div class="wrap member__grid">
+    <div class="member__stage" data-reveal>
+      <div class="stage">
+        <svg class="stage__props" viewBox="0 0 420 360" aria-hidden="true">
+          <ellipse cx="210" cy="332" rx="180" ry="26" fill="#fff" opacity="0.36" />
+          <g transform="translate(292 278)">
+            <rect x="0" y="18" width="34" height="34" rx="6" fill="#f4a261" />
+            <rect x="38" y="26" width="28" height="26" rx="5" fill="#8fcb6b" />
+            <rect x="8" y="-8" width="30" height="30" rx="5" fill="#6fb3d9" />
+            <text x="23" y="7" text-anchor="middle" font-family="Arial Rounded MT Bold, PingFang SC, sans-serif" font-size="17" fill="#fff">G</text>
+            <text x="52" y="45" text-anchor="middle" font-family="Arial Rounded MT Bold, PingFang SC, sans-serif" font-size="13" fill="#fff">P</text>
+          </g>
+          <g transform="translate(56 300)">
+            <ellipse cx="0" cy="0" rx="22" ry="8" fill="#cfe8b5" />
+            <circle cx="-17" cy="-4" r="3" fill="#fff" /><circle cx="-5" cy="-8" r="2.4" fill="#fff" />
+          </g>
+          <g transform="translate(64 88)" opacity="0.8">
+            <path d="M0 0c10-6 20-6 30 0M6 10c8-5 16-5 24 0" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" />
+          </g>
+        </svg>
+        <button class="character" type="button" data-say="Dine-saw！恐龙！" aria-label="戳一下乔治">
+          <svg viewBox="0 0 220 300" aria-hidden="true"><use href="#pig-george" /></svg>
+        </button>
+        <div class="bubble" role="status" aria-live="polite"></div>
+        <span class="stage__hint" aria-hidden="true">戳一下</span>
+      </div>
+    </div>
+    <div class="member__copy">
+      <p class="member__num" data-reveal>02 · 弟弟</p>
+      <h2 class="member__name" data-reveal style="--d:40ms">乔治</h2>
+      <p class="member__en" data-reveal style="--d:60ms">George Pig · 2岁</p>
+      <div class="tags" data-reveal style="--d:80ms">
+        <span>恐龙不离手</span><span>爱哭也爱笑</span><span>姐姐的小尾巴</span>
+      </div>
+      <blockquote class="member__quote" data-reveal style="--d:100ms">“Dine-saw！”</blockquote>
+      <p class="member__text" data-reveal style="--d:120ms">两岁的乔治话不多，最会说的是“恐龙”。他走到哪儿都抱着那只绿色小恐龙，哭起来震天响，可只要佩奇牵起他的手，眼泪就会停在一半。他是姐姐最忠实的小尾巴。</p>
+      <p class="member__secret" data-reveal style="--d:140ms"><b>他的小秘密：</b>恐龙先生也要盖被子，不然会感冒。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MUMMY ================= -->
+<section class="member member--mummy" id="mummy">
+  <div class="wrap member__grid">
+    <div class="member__stage" data-reveal>
+      <div class="stage">
+        <svg class="stage__props" viewBox="0 0 420 360" aria-hidden="true">
+          <ellipse cx="210" cy="332" rx="180" ry="26" fill="#fff" opacity="0.34" />
+          <g transform="translate(300 250)">
+            <rect x="0" y="18" width="94" height="10" rx="5" fill="#e2b98f" />
+            <rect x="8" y="28" width="7" height="52" rx="3" fill="#c99668" />
+            <rect x="79" y="28" width="7" height="52" rx="3" fill="#c99668" />
+            <rect x="30" y="20" width="34" height="24" rx="4" fill="#5b8def" />
+            <rect x="34" y="24" width="26" height="16" rx="2" fill="#bfe7f4" />
+            <rect x="27" y="42" width="40" height="4" rx="2" fill="#3f6fd0" />
+            <g transform="translate(72 10)">
+              <rect x="0" y="0" width="18" height="16" rx="4" fill="#fff" />
+              <path d="M18 6h5a4 4 0 0 1 0 8h-5" fill="none" stroke="#fff" stroke-width="3" />
+              <path d="M5 -6c-2-4 2-6 0-10M12 -6c-2-4 2-6 0-10" stroke="#e9d6c5" stroke-width="2" stroke-linecap="round" fill="none" />
+            </g>
+          </g>
+          <g transform="translate(56 318)">
+            <circle cx="0" cy="0" r="4" fill="#fff" /><circle cx="9" cy="-5" r="3.4" fill="#fff" /><circle cx="-8" cy="-6" r="3.4" fill="#fff" />
+            <circle cx="0" cy="0" r="1.5" fill="#ffd166" />
+          </g>
+        </svg>
+        <button class="character" type="button" data-say="慢慢来，我们一起想办法。" aria-label="戳一下猪妈妈">
+          <svg viewBox="0 0 220 300" aria-hidden="true"><use href="#pig-mummy" /></svg>
+        </button>
+        <div class="bubble" role="status" aria-live="polite"></div>
+        <span class="stage__hint" aria-hidden="true">戳一下</span>
+      </div>
+    </div>
+    <div class="member__copy">
+      <p class="member__num" data-reveal>03 · 妈妈</p>
+      <h2 class="member__name" data-reveal style="--d:40ms">猪妈妈</h2>
+      <p class="member__en" data-reveal style="--d:60ms">Mummy Pig · 家里的定海神针</p>
+      <div class="tags" data-reveal style="--d:80ms">
+        <span>温柔坚定</span><span>会修电脑</span><span>故事讲得最好</span>
+      </div>
+      <blockquote class="member__quote" data-reveal style="--d:100ms">“慢慢来，我们一起想办法。”</blockquote>
+      <p class="member__text" data-reveal style="--d:120ms">猪妈妈是家里最稳的那个人。她在家工作，也把一日三餐、睡前故事和所有小情绪安排得妥妥当当。她很少大声说话，但家里每个人都知道：有她在，事情总会好起来。</p>
+      <p class="member__secret" data-reveal style="--d:140ms"><b>她的小秘密：</b>趁大家睡着，会偷偷吃掉最后一块饼干。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DADDY ================= -->
+<section class="member member--daddy" id="daddy">
+  <div class="wrap member__grid">
+    <div class="member__stage" data-reveal>
+      <div class="stage">
+        <svg class="stage__props" viewBox="0 0 420 360" aria-hidden="true">
+          <ellipse cx="210" cy="332" rx="180" ry="26" fill="#fff" opacity="0.34" />
+          <g transform="translate(296 282)">
+            <rect x="0" y="16" width="86" height="14" rx="7" fill="#c99668" />
+            <rect x="8" y="30" width="8" height="40" rx="3" fill="#a9744f" />
+            <rect x="70" y="30" width="8" height="40" rx="3" fill="#a9744f" />
+            <path d="M16 14c0-8 7-14 15-14h24c8 0 15 6 15 14z" fill="#ffd166" />
+            <rect x="18" y="-2" width="50" height="8" rx="4" fill="#f7a6c6" />
+            <circle cx="43" cy="-8" r="4" fill="#e45a6d" />
+            <path d="M43-12c0-4 3-6 6-6" stroke="#6fb553" stroke-width="2" fill="none" />
+          </g>
+          <g transform="translate(56 322)" fill="#fff">
+            <circle cx="0" cy="0" r="4" /><circle cx="9" cy="-5" r="3.4" /><circle cx="-8" cy="-6" r="3.4" />
+          </g>
+          <g transform="translate(72 62)" opacity="0.75">
+            <path d="M0 0c9-5 18-5 27 0M5 9c7-4 14-4 21 0" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" />
+          </g>
+        </svg>
+        <button class="character" type="button" data-say="这个嘛……我正好是个专家。" aria-label="戳一下猪爸爸">
+          <svg viewBox="0 0 220 300" aria-hidden="true"><use href="#pig-daddy" /></svg>
+        </button>
+        <div class="bubble" role="status" aria-live="polite"></div>
+        <span class="stage__hint" aria-hidden="true">戳一下</span>
+      </div>
+    </div>
+    <div class="member__copy">
+      <p class="member__num" data-reveal>04 · 爸爸</p>
+      <h2 class="member__name" data-reveal style="--d:40ms">猪爸爸</h2>
+      <p class="member__en" data-reveal style="--d:60ms">Daddy Pig · 自封的专家</p>
+      <div class="tags" data-reveal style="--d:80ms">
+        <span>肚子圆圆</span><span>爱说“我是专家”</span><span>关键时很靠谱</span>
+      </div>
+      <blockquote class="member__quote" data-reveal style="--d:100ms">“这个嘛……我正好是个专家。”</blockquote>
+      <p class="member__text" data-reveal style="--d:120ms">猪爸爸爱吃、爱看电视，也爱说自己“是个专家”。他常常把地图拿反、把蛋糕烤糊，但下雨前总能找到回家的路，也会在睡前把故事讲得特别夸张——夸张到把自己先讲睡着。</p>
+      <p class="member__secret" data-reveal style="--d:140ms"><b>他的小秘密：</b>其实分不清恐龙的名字，但会陪乔治演一整个下午。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MOMENTS ================= -->
+<section class="moments" id="moments">
+  <div class="wrap">
+    <div class="moments__head">
+      <p class="kicker" data-reveal>Little Days</p>
+      <h2 class="moments__title" data-reveal style="--d:40ms">一些小日子</h2>
+      <p class="moments__lede" data-reveal style="--d:80ms">没有大事发生，只有一些想起来会笑的瞬间。</p>
+    </div>
+    <div class="moments__grid">
+      <article class="postcard" data-reveal>
+        <svg viewBox="0 0 300 220" role="img" aria-label="雨天，一家四口挤在一把伞下">
+          <rect width="300" height="220" fill="#cfedf7" />
+          <g stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.8">
+            <path d="M30 26l-6 16M62 14l-6 16M94 30l-6 16M226 22l-6 16M258 34l-6 16M272 10l-6 16M126 10l-6 16" />
+          </g>
+          <ellipse cx="150" cy="208" rx="96" ry="14" fill="#9fc9a6" />
+          <path d="M150 78c-40 0-66 26-66 52h132c0-26-26-52-66-52z" fill="#e45a6d" />
+          <path d="M150 78c-20 0-36 10-48 26h96c-12-16-28-26-48-26z" fill="#f07f8d" />
+          <path d="M150 78v-16" stroke="#4a3b3b" stroke-width="5" stroke-linecap="round" />
+          <path d="M150 130v52c0 10 12 10 12 0" stroke="#4a3b3b" stroke-width="5" fill="none" stroke-linecap="round" />
+          <g>
+            <circle cx="116" cy="160" r="15" fill="#f7a6c6" />
+            <ellipse cx="101" cy="164" rx="7" ry="5" fill="#f49bbf" />
+            <circle cx="112" cy="154" r="3" fill="#fff" /><circle cx="122" cy="154" r="3" fill="#fff" />
+            <circle cx="111" cy="155" r="1.2" fill="#3b2b2b" /><circle cx="121" cy="155" r="1.2" fill="#3b2b2b" />
+            <circle cx="148" cy="164" r="17" fill="#f7a6c6" />
+            <ellipse cx="131" cy="168" rx="8" ry="6" fill="#f49bbf" />
+            <circle cx="144" cy="158" r="3.2" fill="#fff" /><circle cx="155" cy="158" r="3.2" fill="#fff" />
+            <circle cx="143" cy="159" r="1.3" fill="#3b2b2b" /><circle cx="154" cy="159" r="1.3" fill="#3b2b2b" />
+            <circle cx="182" cy="160" r="15" fill="#f7a6c6" />
+            <ellipse cx="168" cy="164" rx="7" ry="5" fill="#f49bbf" />
+            <circle cx="178" cy="154" r="3" fill="#fff" /><circle cx="188" cy="154" r="3" fill="#fff" />
+            <circle cx="177" cy="155" r="1.2" fill="#3b2b2b" /><circle cx="187" cy="155" r="1.2" fill="#3b2b2b" />
+            <circle cx="208" cy="164" r="13" fill="#f7a6c6" />
+            <ellipse cx="196" cy="168" rx="6" ry="4.4" fill="#f49bbf" />
+            <circle cx="205" cy="158" r="2.6" fill="#fff" /><circle cx="214" cy="158" r="2.6" fill="#fff" />
+            <circle cx="204" cy="159" r="1.1" fill="#3b2b2b" /><circle cx="213" cy="159" r="1.1" fill="#3b2b2b" />
+          </g>
+          <path d="M40 206c26-6 52-6 78 0M182 206c26-6 52-6 78 0" fill="none" stroke="#dfeccd" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <h3>雨天的伞</h3>
+        <p>一把伞下，挤着四只小猪。谁也没淋湿，除了爸爸的肩膀。</p>
+      </article>
+
+      <article class="postcard" data-reveal style="--d:80ms">
+        <svg viewBox="0 0 300 220" role="img" aria-label="睡前，猪爸爸给孩子们读故事">
+          <rect width="300" height="220" fill="#4a5a8a" />
+          <circle cx="238" cy="52" r="22" fill="#ffe9b0" />
+          <circle cx="228" cy="46" r="22" fill="#4a5a8a" />
+          <g fill="#fff" opacity="0.85">
+            <circle cx="42" cy="34" r="2.4" /><circle cx="86" cy="20" r="1.8" /><circle cx="126" cy="44" r="2.2" /><circle cx="184" cy="26" r="1.6" /><circle cx="272" cy="90" r="2" /><circle cx="26" cy="76" r="1.8" />
+          </g>
+          <rect x="0" y="158" width="300" height="62" rx="18" fill="#3e4a70" />
+          <rect x="38" y="120" width="224" height="46" rx="12" fill="#f4a261" />
+          <rect x="46" y="110" width="208" height="22" rx="11" fill="#fff3df" />
+          <circle cx="96" cy="121" r="17" fill="#f7a6c6" />
+          <ellipse cx="81" cy="125" rx="7" ry="5" fill="#f49bbf" />
+          <path d="M86 132c6 4 13 4 19 0" stroke="#a94c6b" stroke-width="2.4" fill="none" stroke-linecap="round" />
+          <circle cx="154" cy="122" r="15" fill="#f7a6c6" />
+          <ellipse cx="141" cy="126" rx="6" ry="4.6" fill="#f49bbf" />
+          <rect x="148" y="127" width="6" height="6" rx="1.5" fill="#fff" />
+          <path d="M186 130c20-18 46-18 66 0v22h-66z" fill="#fffaf2" />
+          <path d="M186 130c20-6 46-6 66 0" stroke="#e2d2bb" stroke-width="2" fill="none" />
+          <g fill="#f6d7a8" opacity="0.9">
+            <rect x="196" y="136" width="14" height="10" rx="2" /><rect x="214" y="140" width="14" height="8" rx="2" /><rect x="196" y="150" width="16" height="6" rx="2" />
+          </g>
+          <text x="244" y="108" font-family="Arial Rounded MT Bold, sans-serif" font-size="16" fill="#ffe9b0">Z</text>
+          <text x="258" y="94" font-family="Arial Rounded MT Bold, sans-serif" font-size="12" fill="#ffe9b0">z</text>
+          <text x="268" y="82" font-family="Arial Rounded MT Bold, sans-serif" font-size="9" fill="#ffe9b0">z</text>
+        </svg>
+        <h3>睡前故事</h3>
+        <p>故事讲到第三遍，爸爸先睡着了。灯还亮着，故事还在继续。</p>
+      </article>
+
+      <article class="postcard" data-reveal style="--d:160ms">
+        <svg viewBox="0 0 300 220" role="img" aria-label="周末野餐，草地上有篮子和三明治">
+          <rect width="300" height="220" fill="#bfe3a1" />
+          <circle cx="248" cy="44" r="26" fill="#ffd166" />
+          <path d="M40 168c50-22 120-22 220 4v48H40z" fill="#9fd17e" />
+          <ellipse cx="150" cy="196" rx="104" ry="24" fill="#f7a6c6" opacity="0.9" />
+          <path d="M58 190h184M58 202h184M86 178v30M118 178v30M150 178v30M182 178v30M214 178v30" stroke="#fff" stroke-width="2" opacity="0.55" />
+          <g>
+            <circle cx="100" cy="142" r="16" fill="#f7a6c6" />
+            <path d="M92 130c-2-6-6-8-9-6-2 2-1 6 2 9" fill="#f7a6c6" />
+            <path d="M106 129c2-6 6-8 9-6 2 2 1 6-2 9" fill="#f7a6c6" />
+            <ellipse cx="84" cy="147" rx="7.5" ry="5.4" fill="#f49bbf" />
+            <circle cx="96" cy="136" r="3.2" fill="#fff" /><circle cx="106" cy="135" r="3.2" fill="#fff" />
+            <circle cx="95" cy="137" r="1.3" fill="#3b2b2b" /><circle cx="105" cy="136" r="1.3" fill="#3b2b2b" />
+            <path d="M88 153c4 4 9 4 13 1" fill="none" stroke="#a94c6b" stroke-width="2.4" stroke-linecap="round" />
+          </g>
+          <g transform="translate(66 146)">
+            <rect x="0" y="18" width="58" height="32" rx="6" fill="#d9a066" />
+            <path d="M6 18c0-16 46-16 46 0" fill="none" stroke="#a9744f" stroke-width="5" />
+            <rect x="24" y="0" width="12" height="12" rx="3" fill="#a9744f" />
+          </g>
+          <circle cx="84" cy="165" r="4.4" fill="#f7a6c6" />
+          <circle cx="108" cy="165" r="4.4" fill="#f7a6c6" />
+          <g transform="translate(168 168) rotate(-8)">
+            <path d="M0 10L24 0l14 16-24 10z" fill="#ffe9b0" />
+            <path d="M4 10l18 8M10 8l18 8" stroke="#8fcb6b" stroke-width="3" stroke-linecap="round" />
+            <path d="M12 16l6-2" stroke="#f4a261" stroke-width="4" stroke-linecap="round" />
+          </g>
+          <g transform="translate(210 154)">
+            <rect x="0" y="0" width="22" height="30" rx="6" fill="#ffd166" />
+            <rect x="0" y="-8" width="22" height="8" rx="3" fill="#f4a261" />
+            <path d="M11 -8v-14" stroke="#fff" stroke-width="3" />
+          </g>
+          <g transform="translate(72 62)" opacity="0.95">
+            <ellipse cx="-8" cy="0" rx="8" ry="11" fill="#f7a6c6" transform="rotate(-24)" />
+            <ellipse cx="8" cy="0" rx="8" ry="11" fill="#f7a6c6" transform="rotate(24)" />
+            <ellipse cx="-7" cy="1" rx="4" ry="6" fill="#ffd166" transform="rotate(-24)" />
+            <ellipse cx="7" cy="1" rx="4" ry="6" fill="#ffd166" transform="rotate(24)" />
+            <rect x="-1.5" y="-10" width="3" height="20" rx="1.5" fill="#4a3b3b" />
+            <path d="M0 -10c-3-5-6-6-9-7M0 -10c3-5 6-6 9-7" stroke="#4a3b3b" stroke-width="1.6" fill="none" stroke-linecap="round" />
+          </g>
+          <g fill="#fff">
+            <circle cx="98" cy="72" r="2.4" /><circle cx="255" cy="120" r="2" /><circle cx="34" cy="106" r="2" />
+          </g>
+        </svg>
+        <h3>周末野餐</h3>
+        <p>三明治、泥坑，和一下午的笑声。回家路上，乔治在爸爸肩上睡着了。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINALE ================= -->
+<section class="finale" id="finale">
+  <div class="finale__head wrap">
+    <p class="kicker" data-reveal>The Whole Gang</p>
+    <h2 data-reveal style="--d:40ms">我们<em>这一家</em></h2>
+    <p class="finale__lede" data-reveal style="--d:80ms">吵吵闹闹，黏黏糊糊，<br />谁也离不开谁。</p>
+  </div>
+
+  <div class="finale__frame" data-reveal style="--d:120ms">
+    <div class="finale__art">
+      <svg class="finale__scene" viewBox="0 0 600 360" role="img" aria-label="佩奇一家四口的全家福">
+        <defs>
+          <linearGradient id="finaleSky" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stop-color="#c7eaf7" />
+            <stop offset="0.62" stop-color="#eaf7e2" />
+            <stop offset="1" stop-color="#d6ecb9" />
+          </linearGradient>
+        </defs>
+        <rect width="600" height="360" fill="url(#finaleSky)" />
+        <g opacity="0.55" fill="none" stroke-width="12" stroke-linecap="round">
+          <path d="M56 296a244 244 0 0 1 488 0" stroke="#f7a6c6" />
+          <path d="M82 296a218 218 0 0 1 436 0" stroke="#ffd166" />
+          <path d="M108 296a192 192 0 0 1 384 0" stroke="#8fcb6b" />
+        </g>
+        <circle cx="516" cy="58" r="30" fill="#ffd166" />
+        <circle cx="516" cy="58" r="42" fill="#ffd166" opacity="0.25" />
+        <g fill="#fff" opacity="0.92">
+          <ellipse cx="96" cy="88" rx="34" ry="15" /><ellipse cx="120" cy="78" rx="22" ry="13" /><ellipse cx="76" cy="80" rx="18" ry="11" />
+          <ellipse cx="488" cy="122" rx="30" ry="13" /><ellipse cx="508" cy="113" rx="19" ry="11" />
+        </g>
+        <path d="M0 296c76-26 154-26 230 0 72-20 146-20 220 2 48 10 100 6 150-4v66H0z" fill="#cfe8b5" />
+        <g>
+          <g class="finale__pig"><use href="#pig-mummy" transform="translate(22 48) scale(0.92)" /></g>
+          <g class="finale__pig"><use href="#pig-daddy" transform="translate(170 34) scale(0.95)" /></g>
+          <g class="finale__pig"><use href="#pig-peppa" transform="translate(356 116) scale(0.72)" /></g>
+          <g class="finale__pig"><use href="#pig-george" transform="translate(466 170) scale(0.55)" /></g>
+        </g>
+        <path d="M0 312c84-18 162-18 236-2 76-14 156-14 230 0 52 8 92 6 134-2v52H0z" fill="#8fcb6b" />
+        <ellipse cx="300" cy="338" rx="80" ry="12" fill="#8a5a3c" opacity="0.6" />
+        <ellipse cx="300" cy="334" rx="52" ry="6" fill="#a9744f" />
+        <g fill="#ffd166">
+          <circle cx="70" cy="334" r="4" /><circle cx="86" cy="342" r="3" /><circle cx="54" cy="344" r="3" />
+          <circle cx="530" cy="340" r="4" /><circle cx="548" cy="332" r="3" />
+        </g>
+        <g fill="none" stroke="#fff" stroke-width="2.4" opacity="0.8">
+          <path d="M156 46c6-6 12-6 18 0M196 58c5-5 10-5 15 0" />
+        </g>
+      </svg>
+      <div class="confetti-layer" aria-hidden="true"></div>
+      <div class="splash-layer" aria-hidden="true"></div>
+    </div>
+    <div class="finale__caption"><span>OINK! OINK!</span><b>我们这一家 · 全家福</b><span>2026</span></div>
+  </div>
+
+  <div class="finale__actions">
+    <button class="jump-btn" id="jumpBtn" type="button" data-reveal style="--d:160ms"><span>🐷</span>一起跳泥坑！</button>
+  </div>
+
+  <div class="finale__foot wrap" data-reveal style="--d:200ms">
+    <p>粉丝自制 · 非商业用途。Peppa Pig 角色版权归 Astley Baker Davies 与 Hasbro 所有。</p>
+    <p><a href="#top" id="backTop">回到开头</a> · Made with ♥ and muddy puddles</p>
+  </div>
+</section>
+
+<script>
+(function () {
+  'use strict';
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var docEl = document.documentElement;
+
+  /* smooth anchor fallback + top link */
+  var backTop = document.getElementById('backTop');
+  if (backTop) {
+    backTop.addEventListener('click', function (event) {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    });
+  }
+
+  /* reveal once, with a scroll fallback so fast flings / anchors never leave content hidden */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+  var revealObserver = null;
+
+  function show(el) {
+    el.classList.add('is-in');
+    if (revealObserver) { try { revealObserver.unobserve(el); } catch (err) {} }
+  }
+
+  function startReveals() {
+    if (!('IntersectionObserver' in window) || reduceMotion.matches) {
+      revealEls.forEach(show);
+      return;
+    }
+    revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) show(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -7% 0px' });
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+
+    var ticking = false;
+    function revealPass() {
+      ticking = false;
+      var vh = window.innerHeight;
+      revealEls.forEach(function (el) {
+        if (el.classList.contains('is-in')) return;
+        if (el.getBoundingClientRect().top < vh * 0.94) show(el);
+      });
+    }
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(revealPass);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    revealPass();
+  }
+  startReveals();
+
+  /* character taps */
+  Array.prototype.forEach.call(document.querySelectorAll('.character'), function (btn) {
+    var stage = btn.closest('.stage');
+    var bubble = stage ? stage.querySelector('.bubble') : null;
+    var timer = 0;
+
+    btn.addEventListener('click', function () {
+      btn.classList.remove('is-hop');
+      void btn.offsetWidth;
+      btn.classList.add('is-hop');
+      window.setTimeout(function () { btn.classList.remove('is-hop'); }, 700);
+
+      if (!bubble) return;
+      bubble.textContent = btn.getAttribute('data-say') || 'Oink!';
+      bubble.classList.add('is-on');
+      if (stage) stage.classList.add('is-talking');
+      window.clearTimeout(timer);
+      timer = window.setTimeout(function () {
+        bubble.classList.remove('is-on');
+        if (stage) stage.classList.remove('is-talking');
+      }, 2800);
+    });
+  });
+
+  /* finale celebration */
+  var finale = document.getElementById('finale');
+  var jumpBtn = document.getElementById('jumpBtn');
+  var confettiLayer = finale ? finale.querySelector('.confetti-layer') : null;
+  var splashLayer = finale ? finale.querySelector('.splash-layer') : null;
+  var colors = ['#f7a6c6', '#ffd166', '#6fb3d9', '#8fcb6b', '#f4a261', '#e45a6d', '#7cc6c9'];
+  var jumped = false;
+
+  function makeConfetti(host, count) {
+    if (!host || reduceMotion.matches) return;
+    for (var i = 0; i < count; i++) {
+      var bit = document.createElement('span');
+      bit.className = 'confetti';
+      bit.style.left = (Math.random() * 100).toFixed(1) + '%';
+      bit.style.background = colors[i % colors.length];
+      bit.style.setProperty('--x', (Math.random() * 90 - 45).toFixed(0) + 'px');
+      bit.style.setProperty('--r', (Math.random() * 520 - 260).toFixed(0) + 'deg');
+      bit.style.setProperty('--t', (2.2 + Math.random() * 1.6).toFixed(2) + 's');
+      bit.style.setProperty('--delay', (Math.random() * 0.35).toFixed(2) + 's');
+      bit.style.width = (6 + Math.random() * 6).toFixed(1) + 'px';
+      bit.style.height = (9 + Math.random() * 8).toFixed(1) + 'px';
+      host.appendChild(bit);
+      bit.addEventListener('animationend', function () { this.remove(); });
+    }
+  }
+
+  function makeSplash(host, count) {
+    if (!host || reduceMotion.matches) return;
+    for (var i = 0; i < count; i++) {
+      var drop = document.createElement('span');
+      drop.className = 'splash';
+      drop.style.left = (38 + Math.random() * 24).toFixed(1) + '%';
+      drop.style.setProperty('--x', (Math.random() * 120 - 60).toFixed(0) + 'px');
+      drop.style.setProperty('--y', (-40 - Math.random() * 90).toFixed(0) + 'px');
+      drop.style.setProperty('--delay', (Math.random() * 0.12).toFixed(2) + 's');
+      drop.style.width = drop.style.height = (5 + Math.random() * 7).toFixed(1) + 'px';
+      host.appendChild(drop);
+      drop.addEventListener('animationend', function () { this.remove(); });
+    }
+  }
+
+  if (jumpBtn && finale) {
+    jumpBtn.addEventListener('click', function () {
+      finale.classList.remove('is-on');
+      void finale.offsetWidth;
+      finale.classList.add('is-on');
+      makeConfetti(confettiLayer, 46);
+      makeSplash(splashLayer, 18);
+      jumped = true;
+      jumpBtn.innerHTML = '<span>🐷</span>再来一次！';
+      window.setTimeout(function () { finale.classList.remove('is-on'); }, 1400);
+    });
+  }
+
+  /* a small confetti welcome when the family photo first shows up */
+  if (finale && 'IntersectionObserver' in window && !reduceMotion.matches) {
+    var seen = false;
+    var finaleObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && !seen) {
+          seen = true;
+          makeConfetti(confettiLayer, 22);
+          finaleObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.35 });
+    finaleObserver.observe(finale);
+  }
+
+  /* keep the muddy-puddle button playful on reduced motion as well */
+  if (reduceMotion.addEventListener) {
+    reduceMotion.addEventListener('change', function () {
+      if (reduceMotion.matches && jumped) jumpBtn.innerHTML = '<span>🐷</span>一起跳泥坑！';
+    });
+  }
+})();
+</script>
+</body>
+</html>
