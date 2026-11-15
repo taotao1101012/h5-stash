@@ -3,6 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="robots" content="noindex, nofollow, noarchive" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="布鲁伊 · 一家四口" />
+<meta property="og:description" content="二年级八班 刘欣宁的角色图鉴：四个角色、四个小游戏，最后还能拍一张全家福。" />
+<meta property="og:image" content="https://taotao1101012.github.io/h5-stash/bluey-family/preview-hero.jpg" />
+<meta property="og:url" content="https://taotao1101012.github.io/h5-stash/bluey-family/" />
+<meta name="twitter:card" content="summary_large_image" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#FFF8EE" />
@@ -71,15 +77,19 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 .slide{
   position:relative;flex:0 0 100%;height:100%;min-width:0;
   display:flex;flex-direction:column;
-  padding:calc(26px + env(safe-area-inset-top)) 22px calc(42px + env(safe-area-inset-bottom));
+  padding:calc(26px + env(safe-area-inset-top)) 22px calc(48px + env(safe-area-inset-bottom));
 }
 
 /* 底部进度 */
-.steps{position:absolute;left:22px;right:22px;top:calc(7px + env(safe-area-inset-top));
-  z-index:60;display:flex;align-items:center;gap:4px;}
-.steps i{display:block;flex:1 1 0;height:3px;border-radius:2px;background:rgba(42,32,25,.13);
-  cursor:pointer;transition:background .3s var(--ease), transform .3s var(--ease);}
-.steps i.is-on{background:var(--accent);transform:scaleY(1.5);}
+.strip{position:absolute;left:0;right:0;bottom:calc(9px + env(safe-area-inset-bottom));
+  z-index:60;display:flex;align-items:flex-end;justify-content:center;gap:5px;}
+.strip button{width:28px;height:28px;padding:0;border:0;border-radius:6px;overflow:hidden;
+  background:#FFFDF9;cursor:pointer;opacity:.42;transform:scale(.94);
+  box-shadow:0 2px 6px rgba(74,48,26,.16), 0 0 0 1px rgba(74,48,26,.05);
+  transition:opacity .28s var(--ease), transform .28s var(--ease), box-shadow .28s var(--ease);}
+.strip button svg{width:100%;height:100%;display:block;}
+.strip button.is-on{opacity:1;transform:scale(1.12) translateY(-2px);
+  box-shadow:0 6px 14px rgba(74,48,26,.28), 0 0 0 1.5px var(--accent);}
 
 /* ---------- 通用字 ---------- */
 .eyebrow{margin:0;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);font-weight:600;}
@@ -87,7 +97,7 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 /* ============================================================
    封面
    ============================================================ */
-.slide--cover{padding-bottom:calc(4px + env(safe-area-inset-bottom));overflow:hidden;}
+.slide--cover{padding-bottom:calc(42px + env(safe-area-inset-bottom));overflow:hidden;}
 .cover{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding-top:1vh;position:relative;z-index:2;}
 .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 15px;border-radius:999px;
@@ -217,6 +227,13 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 .chips li{font-size:11px;padding:5px 10px;border-radius:999px;font-weight:600;letter-spacing:.02em;
   color:var(--accent);background:var(--tint);
   border:1px solid color-mix(in srgb,var(--accent) 22%,transparent);}
+.card__play{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin-top:8px;
+  padding:9px 16px;border-radius:999px;border:1px solid color-mix(in srgb,var(--accent) 26%,transparent);
+  background:color-mix(in srgb,var(--tint) 55%,#fff);color:var(--accent);
+  font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.03em;cursor:pointer;
+  transition:transform .16s var(--ease), background .2s var(--ease);}
+.card__play:active{transform:scale(.96);}
+.card__play-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.65;}
 .card__quote{margin:4px 0 0;padding:11px 13px;border-radius:15px 15px 15px 4px;
   background:var(--tint);color:var(--accent);font-size:12.5px;font-weight:600;line-height:1.55;}
 
@@ -224,7 +241,7 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 /* ============================================================
    合集
    ============================================================ */
-.slide--family{padding:calc(20px + env(safe-area-inset-top)) 18px calc(14px + env(safe-area-inset-bottom));
+.slide--family{padding:calc(20px + env(safe-area-inset-top)) 18px calc(46px + env(safe-area-inset-bottom));
   justify-content:space-between;overflow:hidden;
   background:radial-gradient(120% 48% at 50% 103%, #F5D3AE 0%, #FBE6CD 36%, rgba(255,248,238,0) 72%);}
 .fam__stage{position:absolute;inset:0 0 104px 0;z-index:0;pointer-events:none;}
@@ -304,7 +321,7 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
   border:1px solid color-mix(in srgb,var(--accent) 20%,transparent);}
 
 /* ---------- 全家福 ---------- */
-.fam__frame{position:absolute;left:5%;right:5%;top:12%;bottom:15%;
+.fam__frame{position:absolute;left:5%;right:5%;top:12%;bottom:18.5%;
   border:9px solid #FFFDF9;border-bottom-width:62px;border-radius:2px;
   transform:rotate(-1.3deg) scale(.965);opacity:0;pointer-events:none;z-index:5;
   transition:opacity .42s var(--ease), transform .72s cubic-bezier(.22,.9,.24,1);}
@@ -327,6 +344,13 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 .shutter:active{transform:scale(.96);}
 .shutter__dot{width:10px;height:10px;border-radius:50%;border:2px solid currentColor;opacity:.7;}
 .fam__actions{display:flex;align-items:center;gap:10px;}
+.frame-pick{display:none;align-items:center;gap:6px;margin-bottom:2px;}
+.slide--family.is-shot .frame-pick{display:flex;animation:saveIn .45s cubic-bezier(.22,.9,.24,1) both .05s;}
+.frame-pick button{padding:6px 12px;border-radius:999px;border:1px solid rgba(42,32,25,.12);
+  background:rgba(255,255,255,.7);color:var(--ink-2);font-family:inherit;font-size:11px;font-weight:600;
+  letter-spacing:.03em;cursor:pointer;transition:background .2s, color .2s, border-color .2s;}
+.frame-pick button.is-on{background:var(--ink);color:#FFF8EE;border-color:transparent;}
+.frame-pick button:active{transform:scale(.96);}
 .shutter--save{display:none;background:var(--ink);color:#FFF8EE;border-color:transparent;}
 .slide--family.is-shot .shutter--save{display:inline-flex;animation:saveIn .5s cubic-bezier(.22,.9,.24,1) both .1s;}
 @keyframes saveIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
@@ -545,6 +569,11 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
     </div>
     <div class="fam__bottom">
       <p class="fam__foot">游戏结束前，谁都不许长大。<br><b>— 班迪 &amp; 琪莉</b><br><span class="fam__credit">作者 · 二年级八班 刘欣宁</span></p>
+      <div class="frame-pick" id="framePick">
+        <button type="button" data-style="polaroid" class="is-on">拍立得</button>
+        <button type="button" data-style="white">白边</button>
+        <button type="button" data-style="plain">满幅</button>
+      </div>
       <div class="fam__actions">
         <button class="shutter" id="shutterBtn" type="button">
           <span class="shutter__dot"></span>
@@ -560,7 +589,7 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 
   </div><!-- /deck -->
 
-  <nav class="steps" id="steps" aria-label="页码"></nav>
+  <nav class="strip" id="strip" aria-label="页码"></nav>
 
   <div class="play" id="play" aria-hidden="true">
     <div class="play__panel" role="dialog" aria-modal="true" aria-labelledby="playTitle">
@@ -816,6 +845,8 @@ const PROP = {
       <circle cx="22" cy="23" r="4.4" fill="currentColor"/></svg>`
 };
 
+const CHAR_GAME = { bandit:'rocket', chilli:'balloon', bluey:'xylo', bingo:'hide' };
+
 // 角色：每人一屏
 let cardN = 0;
 document.getElementById('charSlides').innerHTML = CHARS.map((c) => `
@@ -841,9 +872,16 @@ document.getElementById('charSlides').innerHTML = CHARS.map((c) => `
         <p class="card__tag">${c.tag}</p>
         <div class="card__facts">${c.facts.map(([k,v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>
         <p class="card__quote">${c.quote}</p>
+        <button class="card__play" type="button" data-game="${CHAR_GAME[c.key]}">
+          <span class="card__play-dot"></span>和${c.name}玩一局<span aria-hidden="true">→</span>
+        </button>
       </div>
     </article>
   </section>`).join('');
+
+document.querySelectorAll('.card__play').forEach(b => {
+  b.addEventListener('click', () => window.openGame && window.openGame(b.dataset.game));
+});
 
 /* ---------- 游戏 ---------- */
 const GAMES = [
@@ -1315,7 +1353,7 @@ const Music = {
 const deck = document.getElementById('deck');
 const appEl = document.getElementById('app');
 const slides = [...document.querySelectorAll('.slide')];
-const stepsEl = document.getElementById('steps');
+const stripEl = document.getElementById('strip');
 const root = document.documentElement;
 
 let slideIdx = 0;
@@ -1343,8 +1381,8 @@ function measure(){
   slideW = appEl.clientWidth || window.innerWidth || 390;
   setDeckX(-slideIdx * slideW, false);
 }
-function paintSteps(){
-  [...stepsEl.children].forEach((el, i) => el.classList.toggle('is-on', i === slideIdx));
+function paintStrip(){
+  [...stripEl.children].forEach((el, i) => el.classList.toggle('is-on', i === slideIdx));
   const s = slides[slideIdx];
   if(s && s.dataset.accent){
     root.style.setProperty('--accent', s.dataset.accent);
@@ -1357,7 +1395,9 @@ function goSlide(i, opts = {}){
   const prev = slideIdx;
   slideIdx = i;
   setDeckX(-slideIdx * slideW, opts.animate !== false);
-  paintSteps();
+  paintStrip();
+  syncAnim();
+  try { localStorage.setItem('bluey.slide', String(slideIdx)); } catch(err){}
   if(i === prev) return;
   Music.chime(i === slides.length - 1 ? [72,76,79,84] : [79,84], .085, .12);
   if(i === slides.length - 1){
@@ -1366,12 +1406,46 @@ function goSlide(i, opts = {}){
   }
 }
 
-/* 底部进度 */
-stepsEl.innerHTML = slides.map((s, i) => `<i data-go="${i}" role="button" tabindex="0" aria-label="第 ${i+1} 页"></i>`).join('');
-stepsEl.addEventListener('click', (e) => {
-  const t = e.target.closest('i');
+/* 底部胶片条 */
+function tinyDog(c){
+  return `<svg viewBox="0 0 64 64" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="64" height="64" fill="${c.tint}"/>
+    <path d="M18 30 C10 22 9 10 14 8 C20 6 25 17 26 26 Z" fill="${c.coatDark}"/>
+    <path d="M46 30 C54 22 55 10 50 8 C44 6 39 17 38 26 Z" fill="${c.coat}"/>
+    <path d="M32 12 C45 12 52 21 52 34 C52 47 44 55 32 55 C20 55 12 47 12 34 C12 21 19 12 32 12 Z" fill="${c.coat}"/>
+    <ellipse cx="32" cy="43" rx="15" ry="10" fill="${c.cream}"/>
+    <circle cx="25" cy="34" r="3.2" fill="#241C17"/><circle cx="39" cy="34" r="3.2" fill="#241C17"/>
+    <ellipse cx="32" cy="41" rx="4" ry="3" fill="#241C17"/></svg>`;
+}
+const STRIP_ART = [
+  tinyDog(byKey('bluey')),
+  ...CHARS.map(tinyDog),
+  `<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#FCE7D2"/>
+     <circle cx="32" cy="32" r="17" fill="#E4873F"/>
+     <path d="M15 32h34M32 15c8 8 8 26 0 34M32 15c-8 8-8 26 0 34" stroke="#FCE7D2" stroke-width="2.8" fill="none"/></svg>`,
+  `<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" fill="#DDE6C6"/>
+     <rect x="13" y="11" width="38" height="42" rx="3" fill="#FFFDF9"/>
+     <rect x="18" y="16" width="28" height="25" fill="#FBE2C4"/>
+     <circle cx="27" cy="26" r="4" fill="#E4873F"/>
+     <path d="M18 41 l9 -8 l6 5 l5 -4 l8 7 z" fill="#C9D8AE"/></svg>`
+];
+stripEl.innerHTML = STRIP_ART.slice(0, slides.length).map((art, i) =>
+  `<button type="button" data-go="${i}" aria-label="第 ${i+1} 页">${art}</button>`).join('');
+stripEl.addEventListener('click', (e) => {
+  const t = e.target.closest('button');
   if(t) goSlide(+t.dataset.go);
 });
+
+/* 离屏画面暂停动画，省电 */
+function syncAnim(){
+  slides.forEach((sl, i) => {
+    const near = Math.abs(i - slideIdx) <= 1;
+    sl.querySelectorAll('svg').forEach(sv => {
+      if(typeof sv.pauseAnimations !== 'function') return;
+      try { near ? sv.unpauseAnimations() : sv.pauseAnimations(); } catch(err){}
+    });
+  });
+}
 
 /* 拖拽翻页：唯一的手势轴 */
 appEl.addEventListener('pointerdown', (e) => {
@@ -1549,7 +1623,9 @@ function exportSVG(){
   return new XMLSerializer().serializeToString(clone);
 }
 
-async function buildPhotoBlob(){
+let frameStyle = 'polaroid';
+
+async function buildPhotoBlob(style = frameStyle){
   const str = exportSVG();
   if(!str) return null;
   const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(str);
@@ -1557,7 +1633,9 @@ async function buildPhotoBlob(){
   img.src = url;
   await img.decode();
 
-  const W = 1080, H = 1920, pad = 60, capH = 240;
+  const W = 1080, H = 1920;
+  const pad = style === 'plain' ? 0 : (style === 'white' ? 46 : 62);
+  const capH = style === 'polaroid' ? 250 : pad;
   const dw = W - pad * 2, dh = H - pad - capH;
   const cv = document.createElement('canvas');
   cv.width = W; cv.height = H;
@@ -1572,14 +1650,16 @@ async function buildPhotoBlob(){
   else { sw = srcH * target; sx = (srcW - sw) / 2; }
   ctx.drawImage(img, sx, sy, sw, sh, pad, pad, dw, dh);
 
-  const cx = W / 2;
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#4A3A2C';
-  ctx.font = '600 44px "PingFang SC","Hiragino Sans GB","Noto Sans SC",sans-serif';
-  ctx.fillText('2026 · 我们这一家', cx, pad + dh + 106);
-  ctx.fillStyle = 'rgba(74,58,44,.45)';
-  ctx.font = '400 30px "PingFang SC","Hiragino Sans GB","Noto Sans SC",sans-serif';
-  ctx.fillText('摄于 · 二年级八班 刘欣宁', cx, pad + dh + 160);
+  if(style === 'polaroid'){
+    const cx = W / 2;
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#4A3A2C';
+    ctx.font = '600 44px "PingFang SC","Hiragino Sans GB","Noto Sans SC",sans-serif';
+    ctx.fillText('2026 · 我们这一家', cx, pad + dh + 106);
+    ctx.fillStyle = 'rgba(74,58,44,.45)';
+    ctx.font = '400 30px "PingFang SC","Hiragino Sans GB","Noto Sans SC",sans-serif';
+    ctx.fillText('摄于 · 二年级八班 刘欣宁', cx, pad + dh + 160);
+  }
 
   return new Promise(res => cv.toBlob(b => res(b), 'image/png'));
 }
@@ -1624,6 +1704,14 @@ async function savePhoto(){
     label.textContent = '保存照片';
   }
 }
+
+document.querySelectorAll('#framePick button').forEach(b => {
+  b.addEventListener('click', () => {
+    frameStyle = b.dataset.style;
+    document.querySelectorAll('#framePick button').forEach(x => x.classList.toggle('is-on', x === b));
+    Music.blip([84], 0, .18, .14);
+  });
+});
 
 document.getElementById('saveBtn').addEventListener('click', savePhoto);
 window.__buildPhoto = buildPhotoBlob;
@@ -1971,7 +2059,11 @@ window.openGame = openGame;
 
 /* 初始化 */
 measure();
-paintSteps();
+let startSlide = 0;
+try { startSlide = Math.max(0, Math.min(slides.length - 1, +(localStorage.getItem('bluey.slide') || 0))); } catch(err){}
+if(startSlide) goSlide(startSlide, { animate: false, force: true });
+paintStrip();
+syncAnim();
 requestAnimationFrame(measure);
 window.addEventListener('load', measure);
 window.goSlide = goSlide;
