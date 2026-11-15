@@ -285,7 +285,11 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 .game{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;
   text-align:center;padding:18px 14px;border-radius:24px;overflow:hidden;
   background:linear-gradient(180deg,#FFFEFA 0%,#FFF6E9 100%);
-  box-shadow:0 0 0 1px rgba(74,48,26,.055), 0 20px 36px -26px rgba(74,48,26,.45);}
+  box-shadow:0 0 0 1px rgba(74,48,26,.055), 0 20px 36px -26px rgba(74,48,26,.45);
+  cursor:pointer;transition:transform .16s var(--ease), box-shadow .25s var(--ease);}
+.game:active{transform:scale(.975);}
+.game.is-play{animation:gamePop .46s cubic-bezier(.2,1.1,.3,1);}
+@keyframes gamePop{0%{transform:scale(.965)}55%{transform:scale(1.015)}100%{transform:scale(1)}}
 .game__num{position:absolute;top:6px;right:12px;font-family:var(--f-latin);font-size:46px;
   font-weight:700;line-height:1;color:var(--accent);opacity:.09;letter-spacing:-.02em;}
 .panel--games.is-enter .game{animation:gameIn .68s cubic-bezier(.22,.9,.24,1) both;
@@ -700,32 +704,96 @@ const GAMES = [
 
 function gameIcon(key, c){
   const wrap = (inner) => `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true">${inner}</svg>`;
+  const float = (amp, dur) => `<animateTransform attributeName="transform" type="translate"
+      values="0 0;0 ${-amp};0 0" keyTimes="0;0.5;1" dur="${dur}s" repeatCount="indefinite"
+      calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"/>`;
+
   if(key === 'balloon') return wrap(`
-    <ellipse cx="32" cy="21" rx="14" ry="16.5" fill="${c}" fill-opacity=".16" stroke="${c}" stroke-width="2.6"/>
-    <path d="M32 37.5 l-4.5 6.5 h9 z" fill="${c}"/>
-    <path d="M32 44 C 25.5 50 38.5 54.5 32 62" stroke="${c}" stroke-width="2.2" stroke-linecap="round" opacity=".7"/>
-    <path d="M24.5 15 C 24.5 11.5 27 9 30 8" stroke="${c}" stroke-width="2.8" stroke-linecap="round" opacity=".45"/>`);
+    <g>${float(4.5, 3.4)}
+      <g>
+        <animateTransform class="play" data-d="0" attributeName="transform" type="translate"
+          values="0 0;0 -20;0 0" keyTimes="0;0.34;1" dur=".68s" begin="indefinite"
+          calcMode="spline" keySplines=".2 1 .3 1;.45 0 .55 1"/>
+        <ellipse cx="32" cy="21" rx="14" ry="16.5" fill="${c}" fill-opacity=".16" stroke="${c}" stroke-width="2.6"/>
+        <path d="M32 37.5 l-4.5 6.5 h9 z" fill="${c}"/>
+        <path d="M32 44 C 25.5 50 38.5 54.5 32 62" stroke="${c}" stroke-width="2.2" stroke-linecap="round" opacity=".7"/>
+        <path d="M24.5 15 C 24.5 11.5 27 9 30 8" stroke="${c}" stroke-width="2.8" stroke-linecap="round" opacity=".45"/>
+      </g>
+    </g>`);
+
   if(key === 'xylo') return wrap(`
-    <rect x="8" y="28" width="13" height="21" rx="4" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4"/>
-    <rect x="25.5" y="31" width="13" height="18" rx="4" fill="${c}" fill-opacity=".32" stroke="${c}" stroke-width="2.4"/>
-    <rect x="43" y="34" width="13" height="15" rx="4" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4"/>
-    <path d="M19 8 L45 26" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>
-    <circle cx="17" cy="7" r="4.6" fill="${c}"/>`);
+    <rect x="8" y="28" width="13" height="21" rx="4" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4">
+      <animate class="play" data-d="70" attributeName="fill-opacity" values=".18;.9;.18" dur=".46s" begin="indefinite"/>
+    </rect>
+    <rect x="25.5" y="31" width="13" height="18" rx="4" fill="${c}" fill-opacity=".32" stroke="${c}" stroke-width="2.4">
+      <animate class="play" data-d="150" attributeName="fill-opacity" values=".32;.95;.32" dur=".46s" begin="indefinite"/>
+    </rect>
+    <rect x="43" y="34" width="13" height="15" rx="4" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4">
+      <animate class="play" data-d="230" attributeName="fill-opacity" values=".18;.9;.18" dur=".46s" begin="indefinite"/>
+    </rect>
+    <g transform="translate(17,7)">
+      <g>
+        <animateTransform attributeName="transform" type="rotate"
+          values="0 0 0;0 0 0;-15 0 0;0 0 0" keyTimes="0;0.55;0.72;1" dur="3.8s" repeatCount="indefinite"
+          calcMode="spline" keySplines=".4 0 .3 1;.4 0 .6 1;.4 0 .3 1"/>
+        <g>
+          <animateTransform class="play" data-d="0" attributeName="transform" type="rotate"
+            values="0 0 0;-20 0 0;0 0 0" keyTimes="0;0.4;1" dur=".56s" begin="indefinite"
+            calcMode="spline" keySplines=".3 .9 .3 1;.45 0 .55 1"/>
+          <path d="M2 1 L28 19" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="0" cy="0" r="4.6" fill="${c}"/>
+        </g>
+      </g>
+    </g>`);
+
   if(key === 'rocket') return wrap(`
-    <path d="M32 6 C 41 15 45 26 45 37 v11 H19 V37 C19 26 23 15 32 6 Z" fill="${c}" fill-opacity=".14" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/>
-    <circle cx="32" cy="26" r="5.2" fill="#FFFDF9" stroke="${c}" stroke-width="2.4"/>
-    <path d="M19 40 l-7 9 h7 z" fill="${c}" fill-opacity=".28" stroke="${c}" stroke-width="2.2" stroke-linejoin="round"/>
-    <path d="M45 40 l7 9 h-7 z" fill="${c}" fill-opacity=".28" stroke="${c}" stroke-width="2.2" stroke-linejoin="round"/>
-    <path d="M27 49 q5 11 5 13 q0 -2 5 -13" fill="${c}" fill-opacity=".45" stroke="${c}" stroke-width="2.2" stroke-linejoin="round"/>`);
+    <g>${float(3, 2.6)}
+      <g>
+        <animateTransform class="play" data-d="0" attributeName="transform" type="translate"
+          values="0 0;0 -13;0 0" keyTimes="0;0.4;1" dur=".88s" begin="indefinite"
+          calcMode="spline" keySplines=".2 1 .3 1;.45 0 .55 1"/>
+        <path d="M32 6 C 41 15 45 26 45 37 v11 H19 V37 C19 26 23 15 32 6 Z" fill="${c}" fill-opacity=".14" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/>
+        <circle cx="32" cy="26" r="5.2" fill="#FFFDF9" stroke="${c}" stroke-width="2.4"/>
+        <path d="M19 40 l-7 9 h7 z" fill="${c}" fill-opacity=".28" stroke="${c}" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M45 40 l7 9 h-7 z" fill="${c}" fill-opacity=".28" stroke="${c}" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M27 49 q5 11 5 13 q0 -2 5 -13" fill="${c}" fill-opacity=".45" stroke="${c}" stroke-width="2.2" stroke-linejoin="round">
+          <animate attributeName="opacity" values=".5;.95;.35;.8;.5" keyTimes="0;0.25;0.5;0.75;1" dur="1.15s" repeatCount="indefinite"/>
+        </path>
+      </g>
+    </g>`);
+
   return wrap(`
-    <path d="M10 9 h13 v42 q-6.5 -4 -6.5 -12 V9 Z" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/>
-    <path d="M54 9 h-13 v42 q6.5 -4 6.5 -12 V9 Z" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/>
-    <circle cx="27" cy="29" r="3" fill="#2A2019"/>
-    <circle cx="37" cy="29" r="3" fill="#2A2019"/>`);
+    <g>
+      <animateTransform attributeName="transform" type="translate"
+        values="0 0;0 0;0 -1.6;0 0;0 0" keyTimes="0;0.44;0.5;0.56;1" dur="6.4s" repeatCount="indefinite"/>
+      <g>
+        <animateTransform class="play" data-d="0" attributeName="transform" type="translate"
+          values="0 0;-5 0;0 0" keyTimes="0;0.4;1" dur=".86s" begin="indefinite"
+          calcMode="spline" keySplines=".3 .9 .3 1;.45 0 .55 1"/>
+        <path d="M10 9 h13 v42 q-6.5 -4 -6.5 -12 V9 Z" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/>
+      </g>
+      <g>
+        <animateTransform class="play" data-d="0" attributeName="transform" type="translate"
+          values="0 0;5 0;0 0" keyTimes="0;0.4;1" dur=".86s" begin="indefinite"
+          calcMode="spline" keySplines=".3 .9 .3 1;.45 0 .55 1"/>
+        <path d="M54 9 h-13 v42 q6.5 -4 6.5 -12 V9 Z" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/>
+      </g>
+      <g>
+        <animateTransform class="play" data-d="0" attributeName="transform" type="translate"
+          values="0 0;0 -2.5;0 0" keyTimes="0;0.4;1" dur=".86s" begin="indefinite"
+          calcMode="spline" keySplines=".3 .9 .3 1;.45 0 .55 1"/>
+        <ellipse cx="27" cy="29" rx="2.8" ry="3.1" fill="#2A2019">
+          <animate attributeName="ry" values="3.1;3.1;3.1;.5;3.1;3.1" keyTimes="0;0.62;0.93;0.95;0.97;1" dur="5.4s" repeatCount="indefinite"/>
+        </ellipse>
+        <ellipse cx="37" cy="29" rx="2.8" ry="3.1" fill="#2A2019">
+          <animate attributeName="ry" values="3.1;3.1;3.1;.5;3.1;3.1" keyTimes="0;0.62;0.93;0.95;0.97;1" dur="5.4s" repeatCount="indefinite"/>
+        </ellipse>
+      </g>
+    </g>`);
 }
 
 document.getElementById('games').innerHTML = GAMES.map((g, i) => `
-  <article class="game" style="--i:${i};--accent:${g.accent}">
+  <article class="game" data-key="${g.key}" style="--i:${i};--accent:${g.accent}">
     <span class="game__num" aria-hidden="true">0${i+1}</span>
     <div class="game__icon">${gameIcon(g.key, g.accent)}</div>
     <h3>${g.name}</h3>
@@ -733,6 +801,32 @@ document.getElementById('games').innerHTML = GAMES.map((g, i) => `
     <p class="game__note">${g.note}</p>
     <span class="game__who">${g.who}</span>
   </article>`).join('');
+
+
+/* 游戏卡：按下有反应（图标动一下 + 一声） */
+const GAME_SFX = {
+  balloon: () => Music.blip([79], 0, .3, .22),
+  xylo:    () => Music.blip([72,76,79], .07, .5, .18),
+  rocket:  () => Music.blip([48,55,60,67], .05, .5, .15),
+  hide:    () => Music.blip([84,88], .09, .32, .14)
+};
+
+document.querySelectorAll('.game').forEach((card) => {
+  const key = card.dataset.key;
+  const plays = [...card.querySelectorAll('.play')];
+  card.addEventListener('pointerdown', () => {
+    card.classList.remove('is-play');
+    void card.offsetWidth;
+    card.classList.add('is-play');
+    clearTimeout(card._t);
+    card._t = setTimeout(() => card.classList.remove('is-play'), 520);
+    plays.forEach(a => {
+      const d = +(a.dataset.d || 0);
+      setTimeout(() => { try { a.beginElement(); } catch(e){} }, d);
+    });
+    try { (GAME_SFX[key] || (() => {}))(); } catch(e){}
+  });
+});
 
 /* ---------- 合集场景 ---------- */
 
@@ -1046,6 +1140,12 @@ const Music = {
     src.connect(hp); hp.connect(g); g.connect(this.dry); g.connect(this.send);
     src.start(t);
     this.tone(88, t + .02, .45, .1);
+  },
+
+  blip(notes, gap = .06, dur = .4, vol = .2){
+    if(!this.ctx || this.muted) return;
+    const t0 = this.ctx.currentTime + .01;
+    notes.forEach((n, i) => this.tone(n, t0 + i*gap, dur, vol));
   },
 
   chime(notes = [79,84], gap = .09, vol = .16){
