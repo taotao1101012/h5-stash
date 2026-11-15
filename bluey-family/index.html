@@ -208,6 +208,14 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 .card__art{cursor:pointer;}
 .card__art.is-talk > svg{animation:cardBounce .44s cubic-bezier(.3,.9,.35,1);}
 @keyframes cardBounce{0%,100%{transform:translateY(0)}36%{transform:translateY(-12px)}70%{transform:translateY(0)}}
+/* 成长尺 */
+.ruler{position:absolute;left:-4px;top:20%;bottom:16%;width:34px;z-index:1;pointer-events:none;}
+.ruler__bar{position:absolute;left:0;top:0;bottom:0;width:2px;border-radius:1px;
+  background-image:linear-gradient(180deg,var(--accent) 0 40%, transparent 40% 100%);
+  background-size:2px 9px;background-repeat:repeat-y;opacity:.35;}
+.ruler__mark{position:absolute;left:-2px;width:18px;height:2px;border-radius:1px;background:var(--accent);opacity:.55;}
+.ruler__label{position:absolute;left:12px;transform:translateY(50%);font-size:9px;font-weight:700;
+  letter-spacing:.04em;color:var(--accent);opacity:.7;white-space:nowrap;}
 .art-hint{position:absolute;left:50%;bottom:1%;transform:translateX(-50%);z-index:4;
   font-size:10px;letter-spacing:.14em;color:var(--ink-3);white-space:nowrap;
   animation:hintPulse 3.6s ease-in-out infinite;transition:opacity .35s var(--ease);}
@@ -221,6 +229,14 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 .say::after{content:"";position:absolute;left:22px;bottom:-8px;width:0;height:0;
   border:8px solid transparent;border-top-color:var(--tint);border-bottom:0;}
 .say.is-on{opacity:1;transform:translate(-50%,0) scale(1);}
+.fam-say{position:absolute;z-index:7;transform:translate(-50%,-100%) scale(.94);
+  max-width:76%;padding:9px 14px;border-radius:15px 15px 15px 5px;
+  background:#FFFDF9;color:var(--ink);font-size:11.5px;font-weight:700;line-height:1.6;
+  box-shadow:0 18px 32px -20px rgba(74,48,26,.65), 0 0 0 1px rgba(74,48,26,.06);
+  opacity:0;pointer-events:none;transition:opacity .22s var(--ease), transform .32s cubic-bezier(.2,1.1,.3,1);}
+.fam-say::after{content:"";position:absolute;left:24px;bottom:-8px;width:0;height:0;
+  border:8px solid transparent;border-top-color:#FFFDF9;border-bottom:0;}
+.fam-say.is-on{opacity:1;transform:translate(-50%,-100%) scale(1);}
 @keyframes propBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(-5deg)}}
 /* 光环也各有各的样子 */
 .slide--char[data-key="chilli"] .halo__ring{border-style:solid;opacity:.15;}
@@ -314,9 +330,17 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 /* ---------- 角色档案条 ---------- */
 .card__facts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:2px;
   padding-top:10px;border-top:1px dashed color-mix(in srgb,var(--accent) 24%,transparent);}
-.card__facts div{display:flex;flex-direction:column;gap:1px;min-width:0;}
-.card__facts span{font-size:9px;letter-spacing:.12em;color:var(--ink-3);font-weight:600;}
-.card__facts b{font-size:11.5px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;}
+.fact{position:relative;height:44px;padding:0;border:0;background:none;text-align:left;
+  font-family:inherit;cursor:pointer;perspective:520px;-webkit-tap-highlight-color:transparent;}
+.fact__in{position:absolute;inset:0;transform-style:preserve-3d;
+  transition:transform .52s cubic-bezier(.2,.9,.3,1);}
+.fact.is-flip .fact__in{transform:rotateY(180deg);}
+.fact__face{position:absolute;inset:0;display:flex;flex-direction:column;gap:1px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.fact__face--back{transform:rotateY(180deg);}
+.fact__face i{font-style:normal;font-size:9px;letter-spacing:.12em;color:var(--ink-3);font-weight:600;}
+.fact__face b{font-size:11.5px;font-weight:700;letter-spacing:-.01em;line-height:1.25;}
+.fact__face--back b{font-size:10px;font-weight:600;color:var(--accent);line-height:1.35;}
 
 /* ---------- 游戏页 ---------- */
 .slide--games .sec-head{margin-bottom:0;}
@@ -653,7 +677,7 @@ const CHARS = [
     key:'bandit', name:'班迪', latin:'BANDIT', role:'爸爸 · 考古学家',
     tag:'把全家拖进游戏的家伙',
     traits:['游戏大师','举高高','偶尔很憨'],
-    facts:[['必杀','举高高'],['软肋','怕黑'],['最爱','一杯咖啡']],
+    facts:[['必杀','举高高','一次能举起两个'],['软肋','怕黑','睡觉要留小夜灯'],['最爱','一杯咖啡','还要加两块糖']],
     quote:'「这是有史以来最好玩的游戏！」',
     accent:'#2E5C86', tint:'#E3EEF8',
     coat:'#34658F', coatLight:'#4C81AC', coatDark:'#1E4463', cream:'#F7EAD5', belly:'#E4CDA9',
@@ -664,7 +688,7 @@ const CHARS = [
     key:'chilli', name:'琪莉', latin:'CHILLI', role:'妈妈 · 机场安检',
     tag:'温柔，但一眼就看穿你',
     traits:['温柔坚定','情绪稳定','一句顶一万句'],
-    facts:[['必杀','一眼看穿'],['软肋','想要安静'],['最爱','全家都在']],
+    facts:[['必杀','一眼看穿','说谎三秒就露馅'],['软肋','想要安静','五分钟就够'],['最爱','全家都在','一个都不能少']],
     quote:'「有时候，什么都不做，就是最好的。」',
     accent:'#C4562F', tint:'#FBE4D6',
     coat:'#C4643C', coatLight:'#D67E55', coatDark:'#97431F', cream:'#F9EDDB', belly:'#E8D3B2',
@@ -675,7 +699,7 @@ const CHARS = [
     key:'bluey', name:'布鲁伊', latin:'BLUEY', role:'姐姐 · 7 岁',
     tag:'每天都有一个新主意',
     traits:['点子王','想象力','好胜心'],
-    facts:[['必杀','定规则'],['软肋','输了会急'],['最爱','当女王']],
+    facts:[['必杀','定规则','规则还能随时改'],['软肋','输了会急','要求重来三次'],['最爱','当女王','全家都得听话']],
     quote:'「我们来玩个游戏吧！」',
     accent:'#4E93CE', tint:'#DEEBF7',
     coat:'#6FA9D8', coatLight:'#8DC2E9', coatDark:'#4B7FAE', cream:'#F7EBD6', belly:'#E6CFAB',
@@ -686,7 +710,7 @@ const CHARS = [
     key:'bingo', name:'宾果', latin:'BINGO', role:'妹妹 · 5 岁',
     tag:'安静地萌，突然戳中你',
     traits:['小可爱','观察力惊人','悄悄话'],
-    facts:[['必杀','悄悄记住'],['软肋','怕吸尘器'],['最爱','跟着姐姐']],
+    facts:[['必杀','悄悄记住','连你随口说的'],['软肋','怕吸尘器','一响就跳上沙发'],['最爱','跟着姐姐','姐姐去哪她去哪']],
     quote:'「我也要参加——等等我！」',
     accent:'#E4873F', tint:'#FCE7D2',
     coat:'#E5894C', coatLight:'#F2A76E', coatDark:'#BE6529', cream:'#F9EDDA', belly:'#E9D5B5',
@@ -706,7 +730,7 @@ const P_PATCH_L = 'M47,10 C47,52 53,86 65,112 C85,99 103,72 111,38 C99,16 74,6 4
 const P_NOSE  = 'M120,92 C129,92 135,97 135,104 C135,112 129,118 120,118 C111,118 105,112 105,104 C105,97 111,92 120,92 Z';
 const P_BODY  = 'M120,128 C163,128 186,160 186,200 C186,240 160,262 120,262 C80,262 54,240 54,200 C54,160 77,128 120,128 Z';
 
-function dogMarkup(c, uid){
+function dogMarkup(c, uid, hot){
   const id = c.key + '-' + (uid || 'x');
   const es = c.earScale ?? 1;
   const hs = c.headScale ?? 1;
@@ -818,11 +842,17 @@ function dogMarkup(c, uid){
       <path d="M153,63 L158,56"/><path d="M147,60 L148.5,53"/>
     </g>` : ''}
     ${eye(EL)}${eye(ER)}
-  </g>`;
+  </g>
+  ${hot ? `<g class="hot" fill="transparent" pointer-events="all">
+      <circle data-part="ear" cx="80" cy="26" r="36"/>
+      <circle data-part="ear" cx="160" cy="26" r="36"/>
+      <circle data-part="nose" cx="120" cy="106" r="26"/>
+      <circle data-part="tail" cx="202" cy="205" r="24"/>
+    </g>` : ''}`;
 }
 
-function dogSVG(c, cls='', uid='card'){
-  return `<svg class="${cls}" viewBox="0 -36 240 336" role="img" aria-label="${c.name}">${dogMarkup(c, uid)}</svg>`;
+function dogSVG(c, cls='', uid='card', hot=false){
+  return `<svg class="${cls}" viewBox="0 -36 240 336" role="img" aria-label="${c.name}">${dogMarkup(c, uid, hot)}</svg>`;
 }
 
 /* ============================================================
@@ -876,6 +906,14 @@ const PROP = {
 
 const CHAR_GAME = { bandit:'rocket', chilli:'balloon', bluey:'xylo', bingo:'hide' };
 
+/* 成长尺：0–100cm 里各人占的位置 */
+const SIZE = {
+  bandit: { h:'96 cm', pct: 96 },
+  chilli: { h:'92 cm', pct: 92 },
+  bluey:  { h:'64 cm', pct: 64 },
+  bingo:  { h:'52 cm', pct: 52 }
+};
+
 // 角色：每人一屏
 let cardN = 0;
 document.getElementById('charSlides').innerHTML = CHARS.map((c) => `
@@ -893,14 +931,25 @@ document.getElementById('charSlides').innerHTML = CHARS.map((c) => `
           <span class="halo__ring halo__ring--2"></span>
         </div>
         <span class="card__motif" aria-hidden="true">${MOTIF[c.key]}</span>
-        ${dogSVG(c, '', 'card-' + c.key)}
+        ${dogSVG(c, '', 'card-' + c.key, true)}
         <span class="card__prop" aria-hidden="true">${PROP[c.key]}</span>
+        <span class="ruler" aria-hidden="true">
+          <span class="ruler__bar"></span>
+          <span class="ruler__mark" style="bottom:${SIZE[c.key].pct}%"></span>
+          <span class="ruler__label" style="bottom:${SIZE[c.key].pct}%">${SIZE[c.key].h}</span>
+        </span>
         <span class="art-hint">点它 · 会说话</span>
       </div>
       <div class="card__body">
         <h3 class="card__name">${c.name}<span class="card__latin">${c.latin}</span></h3>
         <p class="card__tag">${c.tag}</p>
-        <div class="card__facts">${c.facts.map(([k,v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>
+        <div class="card__facts">${c.facts.map(([k,v,m]) => `
+          <button class="fact" type="button" aria-label="${k}：${v}">
+            <span class="fact__in">
+              <span class="fact__face"><i>${k}</i><b>${v}</b></span>
+              <span class="fact__face fact__face--back"><i>${k}</i><b>${m || v}</b></span>
+            </span>
+          </button>`).join('')}</div>
         <p class="card__quote">${c.quote}</p>
         <button class="card__play" type="button" data-game="${CHAR_GAME[c.key]}">
           <span class="card__play-dot"></span>和${c.name}玩一局<span aria-hidden="true">→</span>
@@ -908,6 +957,13 @@ document.getElementById('charSlides').innerHTML = CHARS.map((c) => `
       </div>
     </article>
   </section>`).join('');
+
+document.querySelectorAll('.fact').forEach(f => {
+  f.addEventListener('click', () => {
+    f.classList.toggle('is-flip');
+    Music.blip([84], 0, .12, .1);
+  });
+});
 
 document.querySelectorAll('.card__play').forEach(b => {
   b.addEventListener('click', () => window.openGame && window.openGame(b.dataset.game));
@@ -1058,7 +1114,7 @@ function famFig(key, cx, ground, s, delay, riseDelay, tilt = 0, gx = 0){
   const X = +(cx - 120*s).toFixed(1);
   const Y = +(ground - 284*s).toFixed(1);
   return `
-  <g transform="translate(${X},${Y}) scale(${s}) rotate(${tilt} 120 284)">
+  <g class="fam-who" data-who="${key}" transform="translate(${X},${Y}) scale(${s}) rotate(${tilt} 120 284)">
     <g class="fam__fig">
       <g>
         <animateTransform class="rise" attributeName="transform" type="translate"
@@ -1474,8 +1530,8 @@ const root = document.documentElement;
 
 let slideIdx = 0;
 let slideW = 0;
-let dragging = false, dragStartX = 0, dragDX = 0, dragBase = 0, dragT0 = 0;
-let tapEl = null, tapChar = null;
+let dragging = false, dragStartX = 0, dragStartY = 0, dragDX = 0, dragBase = 0, dragT0 = 0;
+let tapEl = null, tapChar = null, tapPart = null, tapWho = null;
 
 /* 合集入场的 SMIL 触发（避开 SVG 分组上的 CSS transform） */
 function playFamilyRise(){
@@ -1568,11 +1624,14 @@ appEl.addEventListener('pointerdown', (e) => {
   if(e.target.closest('button, a, .steps, .play')) return;
   dragging = true;
   dragStartX = e.clientX;
+  dragStartY = e.clientY;
   dragDX = 0;
   dragT0 = performance.now();
   dragBase = -slideIdx * slideW;
   tapEl = e.target.closest('.game');
   tapChar = e.target.closest('.card__art');
+  tapPart = (e.target.closest('[data-part]') || {}).dataset?.part || null;
+  tapWho = e.target.closest('[data-who]');
   deck.style.transition = 'none';
   try { appEl.setPointerCapture(e.pointerId); } catch(err){}
 });
@@ -1597,10 +1656,18 @@ function endDrag(){
   // 没怎么动就是"轻点"：打开对应的小游戏
   if(Math.abs(dragDX) < 10){
     if(tapEl) window.openGame && window.openGame(tapEl.dataset.key);
-    else if(tapChar) charTap(tapChar);
+    else if(tapChar) charTap(tapChar, tapPart);
+    else if(tapWho){
+      const famSlide = tapWho.closest('.slide');
+      if(famSlide && famSlide.dataset && famSlide.classList.contains('slide--family')){
+        famTalk(famSlide, tapWho.dataset.who, dragStartX, dragStartY);
+      }
+    }
   }
   tapEl = null;
   tapChar = null;
+  tapPart = null;
+  tapWho = null;
   dragDX = 0;
 }
 appEl.addEventListener('pointerup', endDrag);
@@ -2205,24 +2272,102 @@ window.openGame = openGame;
    7. 点角色：先说一句，再唱一句
    ============================================================ */
 const SAY = {
-  bandit: { pitch: .78, rate: .95, sing: [55, 57, 60, 55], base: 60 },
-  chilli: { pitch: 1.02, rate: .98, sing: [64, 67, 69, 64], base: 67 },
-  bluey:  { pitch: 1.32, rate: 1.08, sing: [72, 74, 76, 72], base: 74 },
-  bingo:  { pitch: 1.50, rate: 1.14, sing: [76, 79, 81, 76], base: 79 }
+  bandit: { pitch: .92, rate: .96, sing: [55, 57, 60, 55], base: 60 },
+  chilli: { pitch: 1.00, rate: 1.00, sing: [64, 67, 69, 64], base: 67 },
+  bluey:  { pitch: 1.12, rate: 1.03, sing: [72, 74, 76, 72], base: 74 },
+  bingo:  { pitch: 1.22, rate: 1.06, sing: [76, 79, 81, 76], base: 79 }
 };
 
 const hasTTS = 'speechSynthesis' in window;
+
+/* 挑一个最自然的中文音色：优先婷婷 / 美嘉，避开系统里的"趣味音色" */
+const VOICE_RANK = [
+  /Ting-?Ting|婷婷|Tingting|Enhanced|Premium/i,
+  /Mei-?Jia|美嘉/i,
+  /Xiaoxiao|晓晓|Yunxi|云希|Huihui|慧慧|Yaoyao|瑶瑶/i,
+  /Google.*(普通话|Mandarin|中文)/i
+];
+const NOVELTY = /Eddy|Flo|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley|Bells|Boing|Bubbles|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Bad News|Good News|Bahh|Albert|Junior|Kathy|Ralph|Fred/i;
+
 let zhVoice = null;
 function pickVoice(){
   if(!hasTTS) return;
   try{
-    const vs = speechSynthesis.getVoices() || [];
-    zhVoice = vs.find(v => /^zh/i.test(v.lang)) || vs.find(v => /chinese|中文|普通话/i.test(v.name)) || null;
+    const vs = (speechSynthesis.getVoices() || []).filter(v => /^zh/i.test(v.lang));
+    if(!vs.length) return;
+    let best = null;
+    for(const re of VOICE_RANK){
+      best = vs.find(v => re.test(v.name) && !NOVELTY.test(v.name));
+      if(best) break;
+    }
+    if(!best) best = vs.find(v => !NOVELTY.test(v.name) && /zh[-_]CN/i.test(v.lang));
+    if(!best) best = vs.find(v => !NOVELTY.test(v.name));
+    zhVoice = best || vs[0];
   }catch(e){}
 }
 if(hasTTS){
   pickVoice();
   try { speechSynthesis.addEventListener('voiceschanged', pickVoice); } catch(e){}
+  setTimeout(pickVoice, 600);
+}
+
+/* 把一句话拆成短句，一句一句念，中间留一点气口——比一口气念完自然得多 */
+function splitPhrases(text){
+  const out = text.replace(/[「」]/g, '').match(/[^，。！？…、]+[，。！？…、]?/g) || [text];
+  return out.map(x => x.trim()).filter(Boolean);
+}
+
+function speakPhrases(list, cfg, onDone){
+  let i = 0;
+  const next = () => {
+    if(i >= list.length){ onDone && onDone(); return; }
+    const u = new SpeechSynthesisUtterance(list[i++]);
+    u.lang = 'zh-CN';
+    u.pitch = cfg.pitch;
+    u.rate = cfg.rate;
+    u.volume = 1;
+    if(zhVoice) u.voice = zhVoice;
+    u.onend = () => setTimeout(next, 150);
+    u.onerror = () => { onDone && onDone(); };
+    try { speechSynthesis.speak(u); } catch(e){ onDone && onDone(); }
+  };
+  next();
+}
+
+const TALK = {
+  bandit: { line: '琪莉，今晚吃什么？', to: 'chilli', reply: '问你的女儿们去。' },
+  chilli: { line: '班迪，你又在沙发上睡着了。', to: 'bandit', reply: '我在考古。' },
+  bluey:  { line: '宾果，我们来玩个游戏吧！', to: 'bingo', reply: '好呀好呀！' },
+  bingo:  { line: '布鲁伊，等等我——', to: 'bluey', reply: '快跟上！' }
+};
+
+function famSay(slide, text, cx, cy){
+  let b = slide.querySelector('.fam-say');
+  if(!b){
+    b = document.createElement('div');
+    b.className = 'fam-say';
+    b.setAttribute('aria-live', 'polite');
+    slide.appendChild(b);
+  }
+  const r = slide.getBoundingClientRect();
+  b.style.left = Math.max(70, Math.min(r.width - 70, cx - r.left)) + 'px';
+  b.style.top = Math.max(110, Math.min(r.height - 210, cy - r.top - 30)) + 'px';
+  b.textContent = text;
+  b.classList.add('is-on');
+  clearTimeout(b._t);
+  b._t = setTimeout(() => b.classList.remove('is-on'), 3800);
+}
+
+function famTalk(slide, who, cx, cy){
+  const t = TALK[who];
+  if(!t) return;
+  famSay(slide, t.line, cx, cy);
+  if(!speakLine(t.line, SAY[who] || SAY.bluey)) Music.babble(4, (SAY[who] || SAY.bluey).base);
+  setTimeout(() => {
+    if(slideIdx !== slides.length - 1) return;
+    famSay(slide, t.reply, cx + 26, cy);
+    if(!speakLine(t.reply, SAY[t.to] || SAY.bluey)) Music.babble(3, (SAY[t.to] || SAY.bluey).base);
+  }, 2200);
 }
 
 const saidOnce = new Set();
@@ -2243,22 +2388,19 @@ function speakLine(text, cfg){
   if(!hasTTS) return false;
   try{
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'zh-CN';
-    u.pitch = cfg.pitch;
-    u.rate = cfg.rate;
-    u.volume = .95;
-    if(zhVoice) u.voice = zhVoice;
-    u.onstart = () => Music.duck(true);
-    u.onend = () => Music.duck(false);
-    u.onerror = () => Music.duck(false);
-    setTimeout(() => { try { speechSynthesis.speak(u); } catch(e){} }, 70);
-    setTimeout(() => Music.duck(false), 4600);
-    return !zhVoice ? !!speechSynthesis.getVoices().length : true;
+    const phrases = splitPhrases(text);
+    Music.duck(true);
+    // 起手稍等一下，等上一条被 cancel 干净
+    setTimeout(() => {
+      speakPhrases(phrases, cfg, () => Music.duck(false));
+    }, 90);
+    // 兜底：万一 onend 没回来
+    setTimeout(() => Music.duck(false), 1200 + phrases.length * 1400);
+    return true;
   }catch(e){ return false; }
 }
 
-function charTap(art){
+function charTap(art, part){
   const slide = art.closest('.slide');
   const key = slide && slide.dataset.key;
   if(!key) return;
@@ -2271,6 +2413,22 @@ function charTap(art){
   art.classList.remove('is-talk');
   void art.offsetWidth;
   art.classList.add('is-talk');
+
+  const PART_LINE = { ear: '（耳朵抖了抖）', nose: '汪！', tail: '（尾巴摇起来了）' };
+  if(part && PART_LINE[part]){
+    bubble.textContent = part === 'nose' ? '汪！' : PART_LINE[part];
+    if(part === 'nose'){ if(!speakLine('汪', cfg)) Music.babble(1, cfg.base); }
+    else if(part === 'tail'){ Music.blip([72,76,79], .07, .22, .16); }
+    else { Music.blip([84], 0, .16, .12); }
+    bubble.classList.add('is-on');
+    if(!saidOnce.has(key)){
+      saidOnce.add(key);
+      const hint = art.querySelector('.art-hint');
+      if(hint) hint.classList.add('is-off');
+    }
+    sayTimer = setTimeout(() => bubble.classList.remove('is-on'), 2600);
+    return;
+  }
 
   if(!talking){
     art.dataset.say = '1';
