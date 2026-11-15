@@ -46,6 +46,12 @@ body{
   -webkit-user-select:none;
 }
 
+button, .arrow, .dot, .kbd{touch-action:manipulation;}
+@media (hover:hover) and (pointer:fine){
+  .arrow:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px);}
+  .card:hover{transform:scale(.945);}
+  .card.is-on:hover{transform:translateY(-2px);}
+}
 /* ---------- 背景 ---------- */
 .bg{position:fixed;inset:0;z-index:0;overflow:hidden;
   background:radial-gradient(125% 85% at 50% -5%, #FFFDF9 0%, #FFF6E9 42%, #FDECDA 100%);}
@@ -221,7 +227,7 @@ body{
 .panel--family{padding:calc(20px + env(safe-area-inset-top)) 18px calc(14px + env(safe-area-inset-bottom));
   justify-content:space-between;overflow:hidden;
   background:radial-gradient(120% 48% at 50% 103%, #F5D3AE 0%, #FBE6CD 36%, rgba(255,248,238,0) 72%);}
-.fam__stage{position:absolute;inset:0;z-index:0;pointer-events:none;}
+.fam__stage{position:absolute;inset:0 0 104px 0;z-index:0;pointer-events:none;}
 .fam__stage svg{width:100%;height:100%;display:block;}
 .fam__head{position:relative;z-index:2;text-align:center;flex:0 0 auto;padding-top:2vh;}
 .fam__head::before{content:"";position:absolute;left:-40%;right:-40%;top:-30%;height:190%;
@@ -231,10 +237,13 @@ body{
 .fam__sub{margin:10px 0 0;font-size:12.5px;line-height:1.7;color:var(--ink-2);font-weight:500;}
 .fam__fig{opacity:0;transition:opacity .7s var(--ease);}
 .fam__fig.is-in{opacity:1;}
-.fam__foot{position:relative;z-index:2;text-align:center;margin:0;font-size:11.5px;line-height:1.7;color:var(--ink-3);letter-spacing:.02em;
+.panel--family.is-shot .fam__foot,
+.panel--family.is-shot .fam__head{opacity:0;}
+.fam__head{transition:opacity .3s var(--ease);}
+.fam__foot{position:relative;z-index:2;text-align:center;transition:opacity .3s var(--ease);margin:0;font-size:11px;line-height:1.55;color:var(--ink-3);letter-spacing:.02em;
   text-shadow:0 1px 6px rgba(255,248,238,.9);}
 .fam__foot b{color:var(--ink-2);font-weight:600;}
-.fam__credit{display:inline-block;margin-top:9px;font-size:10px;letter-spacing:.2em;
+.fam__credit{display:inline-block;margin-top:6px;font-size:9.5px;letter-spacing:.18em;
   text-indent:.2em;opacity:.75;}
 
 /* ============================================================
@@ -260,6 +269,64 @@ body{
 @keyframes eq{0%,100%{height:4px}50%{height:13px}}
 
 /* 小屏收紧 */
+
+/* ---------- 角色档案条 ---------- */
+.card__facts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:2px;
+  padding-top:10px;border-top:1px dashed color-mix(in srgb,var(--accent) 24%,transparent);}
+.card__facts div{display:flex;flex-direction:column;gap:1px;min-width:0;}
+.card__facts span{font-size:9px;letter-spacing:.12em;color:var(--ink-3);font-weight:600;}
+.card__facts b{font-size:11.5px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;}
+
+/* ---------- 游戏页 ---------- */
+.panel--games .sec-head{margin-bottom:0;}
+.games__sub{margin:9px 0 0;font-size:12.5px;line-height:1.7;color:var(--ink-2);font-weight:500;}
+.games{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  gap:12px;margin-top:15px;}
+.game{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;padding:18px 14px;border-radius:24px;overflow:hidden;
+  background:linear-gradient(180deg,#FFFEFA 0%,#FFF6E9 100%);
+  box-shadow:0 0 0 1px rgba(74,48,26,.055), 0 20px 36px -26px rgba(74,48,26,.45);}
+.game__num{position:absolute;top:6px;right:12px;font-family:var(--f-latin);font-size:46px;
+  font-weight:700;line-height:1;color:var(--accent);opacity:.09;letter-spacing:-.02em;}
+.panel--games.is-enter .game{animation:gameIn .68s cubic-bezier(.22,.9,.24,1) both;
+  animation-delay:calc(var(--i) * 70ms);}
+@keyframes gameIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.game__icon{width:74px;height:74px;margin-bottom:9px;}
+.game h3{margin:0;font-size:16px;font-weight:800;letter-spacing:-.025em;line-height:1.2;}
+.game__latin{margin:4px 0 0;font-family:var(--f-latin);font-size:8.5px;letter-spacing:.17em;color:var(--ink-3);text-indent:.17em;}
+.game__note{margin:8px 0 0;font-size:11px;line-height:1.6;color:var(--ink-2);max-width:14em;}
+.game__who{margin-top:12px;font-size:10px;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:999px;
+  color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,#fff);
+  border:1px solid color-mix(in srgb,var(--accent) 20%,transparent);}
+
+/* ---------- 全家福 ---------- */
+.fam__frame{position:absolute;left:5%;right:5%;top:12%;bottom:15%;
+  border:9px solid #FFFDF9;border-bottom-width:62px;border-radius:2px;
+  transform:rotate(-1.3deg) scale(.965);opacity:0;pointer-events:none;z-index:5;
+  transition:opacity .42s var(--ease), transform .72s cubic-bezier(.22,.9,.24,1);}
+.panel--family.is-shot .fam__frame{opacity:1;transform:rotate(-1.3deg) scale(1);
+  box-shadow:0 0 0 120vmax #FFF7ED, 0 26px 54px -26px rgba(92,56,24,.40);}
+.fam__cap{position:absolute;left:0;right:0;bottom:-50px;display:flex;flex-direction:column;gap:4px;
+  align-items:center;text-align:center;font-size:10.5px;letter-spacing:.24em;text-indent:.24em;
+  color:rgba(42,32,25,.55);opacity:0;transition:opacity .5s var(--ease) .22s;}
+.fam__cap em{font-style:normal;font-size:8.5px;letter-spacing:.16em;text-indent:.16em;color:rgba(42,32,25,.34);}
+.panel--family.is-shot .fam__cap{opacity:1;}
+
+.fam__bottom{position:relative;z-index:6;flex:0 0 auto;display:flex;flex-direction:column;
+  align-items:center;gap:13px;}
+.shutter{display:inline-flex;align-items:center;gap:9px;padding:12px 22px;border-radius:999px;
+  border:1px solid rgba(42,32,25,.10);background:rgba(255,255,255,.86);color:var(--ink);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  font-family:inherit;font-size:12.5px;font-weight:700;letter-spacing:.05em;cursor:pointer;
+  box-shadow:0 14px 28px -18px rgba(80,50,20,.55);
+  transition:transform .18s var(--ease), box-shadow .2s var(--ease);}
+.shutter:active{transform:scale(.96);}
+.shutter__dot{width:10px;height:10px;border-radius:50%;border:2px solid currentColor;opacity:.7;}
+
+.flash{position:absolute;inset:0;background:#FFFDF8;opacity:0;pointer-events:none;z-index:90;}
+.flash.go{animation:flash .62s cubic-bezier(.2,.8,.3,1);}
+@keyframes flash{0%{opacity:0}9%{opacity:.96}38%{opacity:.62}100%{opacity:0}}
+
 @media (max-height:700px){
   .cover__title{font-size:clamp(52px,15vw,76px);}
   .cover__sub{margin-top:14px;font-size:12.5px;}
@@ -271,6 +338,16 @@ body{
   .chips li{font-size:10.5px;padding:4px 9px;}
   .fam__title{font-size:clamp(26px,7.6vw,34px);}
   .fam__sub{margin-top:6px;font-size:11.5px;}
+  .fam__credit{display:none;}
+  .fam__frame{bottom:19%;border-bottom-width:46px;}
+  .fam__cap{bottom:-38px;}
+  .fam__bottom{gap:9px;}
+  .fam__foot{font-size:10.5px;line-height:1.55;}
+  .game{padding:12px;border-radius:20px;}
+  .game__icon{width:42px;height:42px;margin-bottom:2px;}
+  .game h3{font-size:14px;}
+  .game__note{font-size:10.5px;margin-top:4px;}
+  .games__sub{font-size:11.5px;margin-top:6px;}
 }
 
 
@@ -348,22 +425,46 @@ body{
     </div>
   </section>
 
-  <!-- ============ 2 合集 ============ -->
-  <section class="panel panel--family" data-panel="2">
+  <!-- ============ 2 游戏 ============ -->
+  <section class="panel panel--games" data-panel="2">
+    <header class="sec-head">
+      <div>
+        <p class="eyebrow">Play / 03</p>
+        <h2 class="sec-title">今天玩什么？</h2>
+      </div>
+    </header>
+    <p class="games__sub">在布鲁伊家，任何东西都能变成一场游戏。</p>
+    <div class="games" id="games"></div>
+  </section>
+
+  <!-- ============ 3 全家福 ============ -->
+  <section class="panel panel--family" data-panel="3">
     <div class="fam__head">
-      <p class="eyebrow">05 · Together</p>
+      <p class="eyebrow">04 · Together</p>
       <h2 class="fam__title">我们这一家</h2>
       <p class="fam__sub">没有超级英雄，只有一起玩的下午。</p>
     </div>
     <div class="fam__stage" id="famStage"></div>
-    <p class="fam__foot">游戏结束前，谁都不许长大。<br><b>— 班迪 &amp; 琪莉</b><br><span class="fam__credit">作者 · 二年级八班 刘欣宁</span></p>
+    <div class="fam__frame" aria-hidden="true">
+      <span class="fam__cap">2026 · 我们这一家<em>摄于 · 二年级八班 刘欣宁</em></span>
+    </div>
+    <div class="fam__bottom">
+      <p class="fam__foot">游戏结束前，谁都不许长大。<br><b>— 班迪 &amp; 琪莉</b><br><span class="fam__credit">作者 · 二年级八班 刘欣宁</span></p>
+      <button class="shutter" id="shutterBtn" type="button">
+        <span class="shutter__dot"></span>
+        <span class="shutter__label">拍一张全家福</span>
+      </button>
+    </div>
   </section>
 
   <nav class="pager" id="pager" aria-label="页面导航">
     <button data-go="0" class="is-on" aria-label="封面"></button>
     <button data-go="1" aria-label="角色"></button>
-    <button data-go="2" aria-label="合集"></button>
+    <button data-go="2" aria-label="游戏"></button>
+    <button data-go="3" aria-label="全家福"></button>
   </nav>
+
+  <div class="flash" id="flash" aria-hidden="true"></div>
 
   <button class="sound" id="soundBtn" type="button" aria-label="开关音乐" aria-pressed="false">
     <span class="sound__bars"><i></i><i></i><i></i></span>
@@ -380,6 +481,7 @@ const CHARS = [
     key:'bandit', name:'班迪', latin:'BANDIT', role:'爸爸 · 考古学家',
     tag:'把全家拖进游戏的家伙',
     traits:['游戏大师','举高高','偶尔很憨'],
+    facts:[['必杀','举高高'],['软肋','怕黑'],['最爱','一杯咖啡']],
     quote:'「这是有史以来最好玩的游戏！」',
     accent:'#2E5C86', tint:'#E3EEF8',
     coat:'#34658F', coatLight:'#4C81AC', coatDark:'#1E4463', cream:'#F7EAD5', belly:'#E4CDA9',
@@ -390,6 +492,7 @@ const CHARS = [
     key:'chilli', name:'琪莉', latin:'CHILLI', role:'妈妈 · 机场安检',
     tag:'温柔，但一眼就看穿你',
     traits:['温柔坚定','情绪稳定','一句顶一万句'],
+    facts:[['必杀','一眼看穿'],['软肋','想要安静'],['最爱','全家都在']],
     quote:'「有时候，什么都不做，就是最好的。」',
     accent:'#C4562F', tint:'#FBE4D6',
     coat:'#C4643C', coatLight:'#D67E55', coatDark:'#97431F', cream:'#F9EDDB', belly:'#E8D3B2',
@@ -400,6 +503,7 @@ const CHARS = [
     key:'bluey', name:'布鲁伊', latin:'BLUEY', role:'姐姐 · 7 岁',
     tag:'每天都有一个新主意',
     traits:['点子王','想象力','好胜心'],
+    facts:[['必杀','定规则'],['软肋','输了会急'],['最爱','当女王']],
     quote:'「我们来玩个游戏吧！」',
     accent:'#4E93CE', tint:'#DEEBF7',
     coat:'#6FA9D8', coatLight:'#8DC2E9', coatDark:'#4B7FAE', cream:'#F7EBD6', belly:'#E6CFAB',
@@ -410,6 +514,7 @@ const CHARS = [
     key:'bingo', name:'宾果', latin:'BINGO', role:'妹妹 · 5 岁',
     tag:'安静地萌，突然戳中你',
     traits:['小可爱','观察力惊人','悄悄话'],
+    facts:[['必杀','悄悄记住'],['软肋','怕吸尘器'],['最爱','跟着姐姐']],
     quote:'「我也要参加——等等我！」',
     accent:'#E4873F', tint:'#FCE7D2',
     coat:'#E5894C', coatLight:'#F2A76E', coatDark:'#BE6529', cream:'#F9EDDA', belly:'#E9D5B5',
@@ -576,7 +681,7 @@ document.getElementById('track').innerHTML = CHARS.map((c, i) => `
     <div class="card__body">
       <h3 class="card__name">${c.name}<span class="card__latin">${c.latin}</span></h3>
       <p class="card__tag">${c.tag}</p>
-      <ul class="chips">${c.traits.map(t => `<li>${t}</li>`).join('')}</ul>
+      <div class="card__facts">${c.facts.map(([k,v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('')}</div>
       <p class="card__quote">${c.quote}</p>
     </div>
   </article>`).join('');
@@ -584,10 +689,55 @@ document.getElementById('track').innerHTML = CHARS.map((c, i) => `
 document.getElementById('dots').innerHTML = CHARS.map((c, i) =>
   `<button type="button" data-go="${i}" class="${i===0?'is-on':''}" aria-label="${c.name}"></button>`).join('');
 
+
+/* ---------- 游戏 ---------- */
+const GAMES = [
+  { key:'balloon', name:'气球不落地', latin:'KEEPY UPPY',        note:'气球不许碰地，谁碰谁输。', who:'全家一起', accent:'#E4873F' },
+  { key:'xylo',    name:'魔法木琴',   latin:'MAGIC XYLOPHONE',   note:'叮一下，全家定住。',       who:'布鲁伊的主意', accent:'#4E93CE' },
+  { key:'rocket',  name:'纸箱飞船',   latin:'CARDBOARD ROCKET',  note:'一个纸箱，能飞到火星。',   who:'班迪当驾驶员', accent:'#C4562F' },
+  { key:'hide',    name:'捉迷藏',     latin:'HIDE & SEEK',       note:'宾果总藏在你找过三遍的地方。', who:'宾果的绝活', accent:'#5C8A6A' }
+];
+
+function gameIcon(key, c){
+  const wrap = (inner) => `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true">${inner}</svg>`;
+  if(key === 'balloon') return wrap(`
+    <ellipse cx="32" cy="21" rx="14" ry="16.5" fill="${c}" fill-opacity=".16" stroke="${c}" stroke-width="2.6"/>
+    <path d="M32 37.5 l-4.5 6.5 h9 z" fill="${c}"/>
+    <path d="M32 44 C 25.5 50 38.5 54.5 32 62" stroke="${c}" stroke-width="2.2" stroke-linecap="round" opacity=".7"/>
+    <path d="M24.5 15 C 24.5 11.5 27 9 30 8" stroke="${c}" stroke-width="2.8" stroke-linecap="round" opacity=".45"/>`);
+  if(key === 'xylo') return wrap(`
+    <rect x="8" y="28" width="13" height="21" rx="4" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4"/>
+    <rect x="25.5" y="31" width="13" height="18" rx="4" fill="${c}" fill-opacity=".32" stroke="${c}" stroke-width="2.4"/>
+    <rect x="43" y="34" width="13" height="15" rx="4" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4"/>
+    <path d="M19 8 L45 26" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="17" cy="7" r="4.6" fill="${c}"/>`);
+  if(key === 'rocket') return wrap(`
+    <path d="M32 6 C 41 15 45 26 45 37 v11 H19 V37 C19 26 23 15 32 6 Z" fill="${c}" fill-opacity=".14" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/>
+    <circle cx="32" cy="26" r="5.2" fill="#FFFDF9" stroke="${c}" stroke-width="2.4"/>
+    <path d="M19 40 l-7 9 h7 z" fill="${c}" fill-opacity=".28" stroke="${c}" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M45 40 l7 9 h-7 z" fill="${c}" fill-opacity=".28" stroke="${c}" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M27 49 q5 11 5 13 q0 -2 5 -13" fill="${c}" fill-opacity=".45" stroke="${c}" stroke-width="2.2" stroke-linejoin="round"/>`);
+  return wrap(`
+    <path d="M10 9 h13 v42 q-6.5 -4 -6.5 -12 V9 Z" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M54 9 h-13 v42 q6.5 -4 6.5 -12 V9 Z" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2.4" stroke-linejoin="round"/>
+    <circle cx="27" cy="29" r="3" fill="#2A2019"/>
+    <circle cx="37" cy="29" r="3" fill="#2A2019"/>`);
+}
+
+document.getElementById('games').innerHTML = GAMES.map((g, i) => `
+  <article class="game" style="--i:${i};--accent:${g.accent}">
+    <span class="game__num" aria-hidden="true">0${i+1}</span>
+    <div class="game__icon">${gameIcon(g.key, g.accent)}</div>
+    <h3>${g.name}</h3>
+    <p class="game__latin">${g.latin}</p>
+    <p class="game__note">${g.note}</p>
+    <span class="game__who">${g.who}</span>
+  </article>`).join('');
+
 /* ---------- 合集场景 ---------- */
 
 
-function famFig(key, cx, ground, s, delay, riseDelay, tilt = 0){
+function famFig(key, cx, ground, s, delay, riseDelay, tilt = 0, gx = 0){
   const c = byKey(key);
   const X = +(cx - 120*s).toFixed(1);
   const Y = +(ground - 284*s).toFixed(1);
@@ -599,11 +749,16 @@ function famFig(key, cx, ground, s, delay, riseDelay, tilt = 0){
           values="0 88;0 0" keyTimes="0;1" dur="1.05s" begin="indefinite" fill="freeze"
           calcMode="spline" keySplines=".2 .9 .3 1"/>
         <g>
-          <animateTransform attributeName="transform" type="translate"
-            values="0 0;0 -7;0 0" keyTimes="0;0.5;1" dur="${3.8 + delay}s"
-            begin="${riseDelay + 1}s" repeatCount="indefinite"
-            calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"/>
-          ${dogMarkup(c, 'fam')}
+          <animateTransform class="gather" attributeName="transform" type="translate"
+            values="0 0;${gx} 0" keyTimes="0;1" dur=".34s" begin="indefinite" fill="freeze"
+            calcMode="spline" keySplines=".2 .9 .3 1"/>
+          <g>
+            <animateTransform attributeName="transform" type="translate"
+              values="0 0;0 -7;0 0" keyTimes="0;0.5;1" dur="${3.8 + delay}s"
+              begin="${riseDelay + 1}s" repeatCount="indefinite"
+              calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"/>
+            ${dogMarkup(c, 'fam')}
+          </g>
         </g>
       </g>
     </g>
@@ -689,10 +844,10 @@ const sceneSVG = `
   <ellipse cx="380" cy="1216" rx="300" ry="96" fill="#FFF6E0" opacity=".26"/>
 
   <!-- 一家四口：爸妈在后，两个小朋友在前 -->
-  ${famFig('bandit', 229, 1120, 2.00, 0, 0.10, -1.6)}
-  ${famFig('chilli', 539, 1120, 1.90, 1.2, 0.22, 1.8)}
-  ${famFig('bluey', 322, 1240, 1.36, 2.1, 0.34, -2.4)}
-  ${famFig('bingo', 502, 1240, 1.05, 3.0, 0.46, 2.2)}
+  ${famFig('bandit', 229, 1120, 2.00, 0, 0.10, -1.6, 11)}
+  ${famFig('chilli', 539, 1120, 1.90, 1.2, 0.22, 1.8, -11)}
+  ${famFig('bluey', 322, 1240, 1.36, 2.1, 0.34, -2.4, 8)}
+  ${famFig('bingo', 502, 1240, 1.05, 3.0, 0.46, 2.2, -8)}
 
   <!-- 飘升的心 -->
   ${heart(200, 1150, 1.5, 1.6, 9.0, '#E98D86')}
@@ -878,6 +1033,21 @@ const Music = {
     this.master.gain.setTargetAtTime(v ? 0 : .5, this.ctx.currentTime, .25);
   },
 
+  shutter(){
+    if(!this.ctx || this.muted) return;
+    const c = this.ctx, t = c.currentTime;
+    const len = Math.max(64, Math.floor(c.sampleRate * .08));
+    const buf = c.createBuffer(1, len, c.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, 2.2);
+    const src = c.createBufferSource(); src.buffer = buf;
+    const hp = c.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 1600;
+    const g = c.createGain(); g.gain.value = .38;
+    src.connect(hp); hp.connect(g); g.connect(this.dry); g.connect(this.send);
+    src.start(t);
+    this.tone(88, t + .02, .45, .1);
+  },
+
   chime(notes = [79,84], gap = .09, vol = .16){
     if(!this.ctx || this.muted) return;
     const t0 = this.ctx.currentTime + .02;
@@ -893,6 +1063,15 @@ const pagerBtns = [...document.querySelectorAll('.pager button')];
 const root = document.documentElement;
 
 let panelIdx = 0;
+
+/* 容器入场：整组一次，不做逐项排队 */
+function playEnter(el, ms){
+  el.classList.remove('is-enter');
+  void el.offsetWidth;
+  el.classList.add('is-enter');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('is-enter'), ms);
+}
 
 /* 合集入场的 SMIL 触发（避开 SVG 分组上的 CSS transform） */
 function playFamilyRise(){
@@ -920,18 +1099,12 @@ function goPanel(i, silent){
   panelIdx = i;
   pagerBtns.forEach((b, k) => b.classList.toggle('is-on', k === i));
 
-  if(i === 1){
-    const cast = panels[1];
-    cast.classList.remove('is-enter');
-    void cast.offsetWidth;
-    cast.classList.add('is-enter');
-    clearTimeout(cast._t);
-    cast._t = setTimeout(() => cast.classList.remove('is-enter'), 1700);
-  }
+  if(i === 1) playEnter(panels[1], 1700);
+  if(i === 2) playEnter(panels[2], 900);
+  if(i === 3) playFamilyRise();
 
-  if(i === 2) playFamilyRise();
-  if(!silent) Music.chime(i === 2 ? [72,76,79,84] : [79,84], .085, .13);
-  if(i === 2) setTimeout(() => Music.chime([79,84,88], .1, .10), 520);
+  if(!silent) Music.chime(i === 3 ? [72,76,79,84] : [79,84], .085, .13);
+  if(i === 3) setTimeout(() => Music.chime([79,84,88], .1, .10), 520);
 }
 
 pagerBtns.forEach(b => b.addEventListener('click', () => goPanel(+b.dataset.go)));
@@ -989,6 +1162,61 @@ soundBtn.addEventListener('click', () => {
   soundBtn.classList.add('bump');
   setTimeout(() => soundBtn.classList.remove('bump'), 180);
 });
+
+
+/* ---------- 全家福拍照 ---------- */
+const flashEl = document.getElementById('flash');
+const famPanel = panels[3];
+const shutterBtn = document.getElementById('shutterBtn');
+const shutterLabel = shutterBtn.querySelector('.shutter__label');
+let hasShot = false, shooting = false;
+
+function fireFlash(){
+  try{
+    flashEl.classList.remove('go');
+    void flashEl.offsetWidth;
+    flashEl.classList.add('go');
+    clearTimeout(flashEl._t);
+    flashEl._t = setTimeout(() => flashEl.classList.remove('go'), 700);
+  }catch(e){}
+}
+
+function shoot(){
+  if(shooting) return;
+  shooting = true;
+  const first = !hasShot;
+
+  if(first){
+    // 1) 一家四口向中间靠拢
+    try{
+      document.querySelectorAll('animateTransform.gather').forEach(a => {
+        try { a.beginElement(); } catch(e) {}
+      });
+      Music.shutter();
+    }catch(e){}
+
+    // 2) 快门亮一下，照片在闪光里落定
+    setTimeout(fireFlash, 240);
+    setTimeout(() => {
+      famPanel.classList.add('is-shot');
+      shutterLabel.textContent = '再拍一张';
+      hasShot = true;
+      shooting = false;
+      try { Music.chime([79,84,88], .09, .1); } catch(e){}
+    }, 380);
+  } else {
+    // 重拍：先把照片退回场景，再闪一次
+    famPanel.classList.remove('is-shot');
+    setTimeout(() => {
+      famPanel.classList.add('is-shot');
+      shooting = false;
+      fireFlash();
+      try { Music.shutter(); } catch(e){}
+    }, 460);
+  }
+}
+
+shutterBtn.addEventListener('click', shoot);
 
 document.addEventListener('visibilitychange', () => {
   if(!document.hidden && Music.ctx && Music.playing && Music.ctx.state === 'suspended'){
