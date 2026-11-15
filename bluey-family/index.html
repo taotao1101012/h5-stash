@@ -874,7 +874,7 @@ function gameIcon(key, c){
 }
 
 document.getElementById('games').innerHTML = GAMES.map((g, i) => `
-  <article class="game" data-key="${g.key}" style="--i:${i};--accent:${g.accent}">
+  <article class="game" data-key="${g.key}" role="button" tabindex="0" style="--i:${i};--accent:${g.accent}">
     <span class="game__num" aria-hidden="true">0${i+1}</span>
     <div class="game__icon">${gameIcon(g.key, g.accent)}</div>
     <h3>${g.name}</h3>
@@ -907,7 +907,9 @@ document.querySelectorAll('.game').forEach((card) => {
     });
     try { (GAME_SFX[key] || (() => {}))(); } catch(e){}
   });
-  card.addEventListener('click', () => window.openGame(key));
+  card.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); window.openGame(key); }
+  });
 });
 
 /* ---------- 合集场景 ---------- */
@@ -1249,6 +1251,7 @@ const root = document.documentElement;
 let slideIdx = 0;
 let slideW = 0;
 let dragging = false, dragStartX = 0, dragDX = 0, dragBase = 0, dragT0 = 0;
+let tapEl = null;
 
 /* 合集入场的 SMIL 触发（避开 SVG 分组上的 CSS transform） */
 function playFamilyRise(){
@@ -1308,6 +1311,7 @@ appEl.addEventListener('pointerdown', (e) => {
   dragDX = 0;
   dragT0 = performance.now();
   dragBase = -slideIdx * slideW;
+  tapEl = e.target.closest('.game');
   deck.style.transition = 'none';
   try { appEl.setPointerCapture(e.pointerId); } catch(err){}
 });
@@ -1329,6 +1333,11 @@ function endDrag(){
   let next = slideIdx;
   if(fast || far) next = slideIdx + (dragDX < 0 ? 1 : -1);
   goSlide(next, { animate: true, force: true });
+  // 没怎么动就是"轻点"：打开对应的小游戏
+  if(tapEl && Math.abs(dragDX) < 10){
+    window.openGame && window.openGame(tapEl.dataset.key);
+  }
+  tapEl = null;
   dragDX = 0;
 }
 appEl.addEventListener('pointerup', endDrag);
