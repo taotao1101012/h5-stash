@@ -326,6 +326,18 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
   transition:transform .18s var(--ease), box-shadow .2s var(--ease);}
 .shutter:active{transform:scale(.96);}
 .shutter__dot{width:10px;height:10px;border-radius:50%;border:2px solid currentColor;opacity:.7;}
+.fam__actions{display:flex;align-items:center;gap:10px;}
+.shutter--save{display:none;background:var(--ink);color:#FFF8EE;border-color:transparent;}
+.panel--family.is-shot .shutter--save{display:inline-flex;animation:saveIn .5s cubic-bezier(.22,.9,.24,1) both .1s;}
+@keyframes saveIn{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+.shutter__save-ico{font-size:13px;line-height:1;opacity:.85;}
+.shutter[disabled]{opacity:.6;pointer-events:none;}
+
+.toast{position:absolute;left:50%;bottom:96px;transform:translate(-50%,10px);z-index:95;
+  padding:10px 18px;border-radius:999px;background:rgba(42,32,25,.9);color:#FFF8EE;
+  font-size:12px;letter-spacing:.04em;white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .28s var(--ease), transform .28s var(--ease);}
+.toast.is-on{opacity:1;transform:translate(-50%,0);}
 
 .flash{position:absolute;inset:0;background:#FFFDF8;opacity:0;pointer-events:none;z-index:90;}
 .flash.go{animation:flash .62s cubic-bezier(.2,.8,.3,1);}
@@ -454,10 +466,16 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
     </div>
     <div class="fam__bottom">
       <p class="fam__foot">游戏结束前，谁都不许长大。<br><b>— 班迪 &amp; 琪莉</b><br><span class="fam__credit">作者 · 二年级八班 刘欣宁</span></p>
-      <button class="shutter" id="shutterBtn" type="button">
-        <span class="shutter__dot"></span>
-        <span class="shutter__label">拍一张全家福</span>
-      </button>
+      <div class="fam__actions">
+        <button class="shutter" id="shutterBtn" type="button">
+          <span class="shutter__dot"></span>
+          <span class="shutter__label">拍一张全家福</span>
+        </button>
+        <button class="shutter shutter--save" id="saveBtn" type="button">
+          <span class="shutter__save-ico" aria-hidden="true">↓</span>
+          <span id="saveLabel">保存照片</span>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -469,6 +487,7 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
   </nav>
 
   <div class="flash" id="flash" aria-hidden="true"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <button class="sound" id="soundBtn" type="button" aria-label="开关音乐" aria-pressed="false">
     <span class="sound__bars"><i></i><i></i><i></i></span>
@@ -1315,6 +1334,127 @@ function shoot(){
     }, 460);
   }
 }
+
+
+/* ---------- 把这张全家福导出成 PNG ---------- */
+const toastEl = document.getElementById('toast');
+let toastTimer = 0;
+function toast(msg, ms = 2400){
+  toastEl.textContent = msg;
+  toastEl.classList.add('is-on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('is-on'), ms);
+}
+
+function exportSVG(){
+  const src = document.querySelector('.fam__stage svg');
+  if(!src) return null;
+  const NS = 'http://www.w3.org/2000/svg';
+  const clone = src.cloneNode(true);
+  clone.setAttribute('xmlns', NS);
+  clone.setAttribute('width', '760');
+  clone.setAttribute('height', '1400');
+
+  let defs = clone.querySelector('defs');
+  if(!defs){ defs = document.createElementNS(NS, 'defs'); clone.insertBefore(defs, clone.firstChild); }
+
+  const grad = document.createElementNS(NS, 'linearGradient');
+  grad.setAttribute('id', 'exp-sky');
+  grad.setAttribute('x1','0'); grad.setAttribute('y1','0');
+  grad.setAttribute('x2','0'); grad.setAttribute('y2','1');
+  [['0','#FFF9F0'],['0.5','#FBE7CE'],['1','#F7D8B4']].forEach(([o,c]) => {
+    const st = document.createElementNS(NS,'stop');
+    st.setAttribute('offset', o); st.setAttribute('stop-color', c);
+    grad.appendChild(st);
+  });
+  defs.appendChild(grad);
+
+  const bg = document.createElementNS(NS,'rect');
+  bg.setAttribute('width','760'); bg.setAttribute('height','1400');
+  bg.setAttribute('fill','url(#exp-sky)');
+  clone.insertBefore(bg, clone.firstChild);
+
+  return new XMLSerializer().serializeToString(clone);
+}
+
+async function buildPhotoBlob(){
+  const str = exportSVG();
+  if(!str) return null;
+  const url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(str);
+  const img = new Image();
+  img.src = url;
+  await img.decode();
+
+  const W = 1080, H = 1920, pad = 60, capH = 240;
+  const dw = W - pad * 2, dh = H - pad - capH;
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#FFFDF9';
+  ctx.fillRect(0, 0, W, H);
+
+  // 居中裁切填满照片区
+  const target = dw / dh, srcW = 760, srcH = 1400;
+  let sw = srcW, sh = srcH, sx = 0, sy = 0;
+  if(srcW / srcH < target){ sh = srcW / target; sy = (srcH - sh) / 2; }
+  else { sw = srcH * target; sx = (srcW - sw) / 2; }
+  ctx.drawImage(img, sx, sy, sw, sh, pad, pad, dw, dh);
+
+  const cx = W / 2;
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#4A3A2C';
+  ctx.font = '600 44px "PingFang SC","Hiragino Sans GB","Noto Sans SC",sans-serif';
+  ctx.fillText('2026 · 我们这一家', cx, pad + dh + 106);
+  ctx.fillStyle = 'rgba(74,58,44,.45)';
+  ctx.font = '400 30px "PingFang SC","Hiragino Sans GB","Noto Sans SC",sans-serif';
+  ctx.fillText('摄于 · 二年级八班 刘欣宁', cx, pad + dh + 160);
+
+  return new Promise(res => cv.toBlob(b => res(b), 'image/png'));
+}
+
+async function savePhoto(){
+  const btn = document.getElementById('saveBtn');
+  const label = document.getElementById('saveLabel');
+  if(btn.disabled) return;
+  btn.disabled = true;
+  label.textContent = '正在生成…';
+  try{
+    const blob = await buildPhotoBlob();
+    if(!blob){ toast('生成失败了，再试一次'); return; }
+    let file = null;
+    try { file = new File([blob], 'bluey-family-2026.png', { type: 'image/png' }); } catch(e){}
+
+    if(file && navigator.canShare && navigator.canShare({ files: [file] })){
+      try{
+        await navigator.share({ files: [file], title: '我们这一家', text: '布鲁伊 · 一家四口' });
+        return;
+      }catch(err){
+        if(err && err.name === 'AbortError') return;
+      }
+    }
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'bluey-family-2026.png';
+    a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    const iOS = /iP(hone|ad|od)/.test(navigator.userAgent);
+    toast(iOS ? '长按图片 → 存储到照片' : '已保存到「下载」', 3000);
+    setTimeout(() => URL.revokeObjectURL(url), 9000);
+  }catch(e){
+    toast('生成失败了，再试一次');
+  }finally{
+    btn.disabled = false;
+    label.textContent = '保存照片';
+  }
+}
+
+document.getElementById('saveBtn').addEventListener('click', savePhoto);
+window.__buildPhoto = buildPhotoBlob;
 
 shutterBtn.addEventListener('click', shoot);
 
