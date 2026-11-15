@@ -1,10 +1,9 @@
 # h5-stash
 
-三个单文件、零外部依赖的 H5 作品，暂存在这里。
+两个单文件、零外部依赖的 H5 作品，暂存在这里。
 
 | 目录 | 作品 | 首屏 |
 |---|---|---|
-| [`wedding/`](wedding/) | 屿 · 晚 — 婚礼邀请函 | ![婚礼](wedding/preview-hero.jpg) |
 | [`peppa-family/`](peppa-family/) | 小猪佩奇 · 我们这一家 | ![佩奇](peppa-family/preview-hero.jpg) |
 | [`bluey-family/`](bluey-family/) | 布鲁伊 · 一家四口（二年级八班 刘欣宁） | ![布鲁伊](bluey-family/preview-hero.jpg) |
 
@@ -15,7 +14,6 @@ cd h5-stash
 python3 -m http.server 8000
 ```
 
-- 婚礼：http://localhost:8000/wedding/
 - 佩奇：http://localhost:8000/peppa-family/
 - 布鲁伊：http://localhost:8000/bluey-family/
 
@@ -23,5 +21,5 @@ python3 -m http.server 8000
 
 ## 说明
 
-- `wedding/`、`peppa-family/`、`bluey-family/` 各自保留了原始 README 与首屏/长图预览。
-- 私有仓库，暂存用；GitHub Pages 对私有仓库需要付费计划，需要在线看再说。
+- `peppa-family/`、`bluey-family/` 各自保留了原始 README 与首屏/长图预览。
+- 已用 GitHub Actions 发布到 GitHub Pages：https://taotao1101012.github.io/h5-stash/
