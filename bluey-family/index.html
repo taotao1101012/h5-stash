@@ -189,6 +189,18 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 .card__art svg{width:100%;height:100%;display:block;transform-origin:50% 92%;
   animation:bob 5.2s ease-in-out infinite;}
 .card__halo{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:1;}
+.card__motif{position:absolute;right:-2%;top:2%;width:56%;color:var(--accent);opacity:.075;
+  transform:rotate(12deg);pointer-events:none;z-index:0;}
+.card__motif svg{width:100%;height:auto;display:block;}
+.card__prop{position:absolute;right:11%;bottom:7%;width:46px;color:var(--accent);z-index:3;
+  pointer-events:none;animation:propBob 4.6s ease-in-out infinite;}
+.card__prop svg{width:100%;height:auto;display:block;}
+@keyframes propBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(-5deg)}}
+/* 光环也各有各的样子 */
+.slide--char[data-key="chilli"] .halo__ring{border-style:solid;opacity:.15;}
+.slide--char[data-key="bluey"] .halo__ring{border-style:dotted;border-width:2px;opacity:.26;}
+.slide--char[data-key="bingo"] .halo__ring{border-style:dashed;opacity:.3;}
+.slide--char[data-key="bingo"] .halo__ring--2{border-style:dotted;}
 .halo__glow{position:absolute;width:78%;aspect-ratio:1;border-radius:50%;
   background:radial-gradient(circle,var(--tint) 0%,transparent 68%);opacity:.9;filter:blur(6px);}
 .halo__ring{position:absolute;width:70%;aspect-ratio:1;border-radius:50%;
@@ -357,14 +369,27 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
   border:1px solid rgba(42,32,25,.13);background:#fff;color:var(--ink);cursor:pointer;}
 .play__again:active{transform:scale(.96);}
 
+/* 游戏里的角色 */
+.g-dog{position:relative;width:100%;}
+.g-dog svg{width:100%;height:auto;display:block;}
+.g-dog.is-hop{animation:dogHop .38s cubic-bezier(.3,.9,.35,1);}
+@keyframes dogHop{0%,100%{transform:translateY(0) scaleY(1)}36%{transform:translateY(-18px) scaleY(1.02)}72%{transform:translateY(0) scaleY(.96)}}
+.g-dog.is-shake{animation:dogShake .34s ease-in-out;}
+@keyframes dogShake{0%,100%{transform:rotate(0)}28%{transform:rotate(-5deg)}68%{transform:rotate(5deg)}}
+
 /* 气球 */
 .b-balloon{position:absolute;left:0;top:0;width:92px;height:92px;will-change:transform;}
 .b-balloon svg{width:100%;height:100%;display:block;}
 .b-ground{position:absolute;left:0;right:0;bottom:0;height:34px;
   background:linear-gradient(180deg,rgba(203,186,150,0),#DDE6C6);}
+.b-follow{position:absolute;left:0;bottom:-8px;width:96px;z-index:2;
+  transition:transform .26s var(--ease);}
 .b-count{position:absolute;left:0;right:0;top:14px;text-align:center;font-size:44px;font-weight:800;
   color:rgba(42,32,25,.12);letter-spacing:-.04em;}
 
+/* 木琴 */
+.x-dogs{position:absolute;left:6px;right:6px;top:2%;display:flex;justify-content:center;gap:3px;}
+.x-dog{width:62px;}
 /* 木琴 */
 .x-keys{position:absolute;left:16px;right:16px;bottom:22px;height:62%;display:flex;align-items:flex-end;gap:9px;}
 .x-key{flex:1 1 0;height:100%;border:0;padding:0;background:none;cursor:pointer;display:flex;align-items:flex-end;}
@@ -377,6 +402,8 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
   color:rgba(42,32,25,.4);letter-spacing:.08em;}
 
 /* 飞船 */
+.r-bandit{position:absolute;left:5%;bottom:50px;width:80px;z-index:1;}
+/* 飞船 */
 .r-meter{position:absolute;left:22px;right:22px;bottom:22px;height:8px;border-radius:4px;
   background:rgba(42,32,25,.10);overflow:hidden;box-shadow:inset 0 1px 2px rgba(42,32,25,.08);}
 .r-meter i{display:block;height:100%;width:0%;border-radius:3px;background:var(--accent);
@@ -387,6 +414,8 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 .r-tip{position:absolute;left:0;right:0;bottom:44%;text-align:center;font-size:12px;font-weight:700;
   color:rgba(42,32,25,.32);letter-spacing:.1em;}
 
+/* 捉迷藏 */
+.h-bluey{position:absolute;left:-14px;bottom:24%;width:80px;z-index:2;}
 /* 捉迷藏 */
 .h-sky{position:absolute;inset:0;pointer-events:none;}
 .h-sun{position:absolute;right:30px;top:26px;width:46px;height:46px;border-radius:50%;
@@ -748,10 +777,49 @@ document.getElementById('coverCast').innerHTML =
   `<div class="cast__fig cast__fig--bluey">${dogSVG(byKey('bluey'), '', 'cvr')}</div>` +
   `<div class="cast__fig cast__fig--bingo">${dogSVG(byKey('bingo'), '', 'cvr')}</div>`;
 
+
+/* ---------- 每人的背景母题 + 小道具 ---------- */
+const MOTIF = {
+  bandit: `<svg viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round">
+      <path d="M34 30 H86"/><circle cx="26" cy="21" r="9"/><circle cx="26" cy="39" r="9"/>
+      <circle cx="94" cy="21" r="9"/><circle cx="94" cy="39" r="9"/></svg>`,
+  chilli: `<svg viewBox="0 0 120 92" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round">
+      <rect x="18" y="28" width="84" height="54" rx="9"/>
+      <path d="M46 28 v-8 a8 8 0 0 1 8 -8 h12 a8 8 0 0 1 8 8 v8"/><path d="M18 46 h84" opacity=".7"/></svg>`,
+  bluey: `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="7">
+      <circle cx="60" cy="60" r="46"/><path d="M14 60 h92"/>
+      <path d="M60 14 c 24 18 24 74 0 92"/><path d="M60 14 c -24 18 -24 74 0 92"/></svg>`,
+  bingo: `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="7">
+      <circle cx="60" cy="22" r="15"/><circle cx="91" cy="45" r="15"/><circle cx="79" cy="83" r="15"/>
+      <circle cx="41" cy="83" r="15"/><circle cx="29" cy="45" r="15"/><circle cx="60" cy="54" r="11"/></svg>`
+};
+
+const PROP = {
+  bandit: `<svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="7" y="17" width="23" height="18" rx="4" fill="currentColor" fill-opacity=".16"/>
+      <path d="M30 22 h4 a4.5 4.5 0 0 1 0 9 h-4"/>
+      <path d="M14 12 c 3 -3 0 -6 3 -8" opacity=".55"/><path d="M22 12 c 3 -3 0 -6 3 -8" opacity=".55"/></svg>`,
+  chilli: `<svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round">
+      <rect x="7" y="16" width="30" height="21" rx="4" fill="currentColor" fill-opacity=".16"/>
+      <path d="M16 16 v-4 a2 2 0 0 1 2 -2 h8 a2 2 0 0 1 2 2 v4"/>
+      <path d="M7 25 h30" opacity=".55"/></svg>`,
+  bluey: `<svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round">
+      <path d="M9 31 L7 15 l8 7 7 -11 7 11 8 -7 -2 16 z" fill="currentColor" fill-opacity=".18"/>
+      <circle cx="7" cy="13" r="2.4" fill="currentColor"/><circle cx="22" cy="8" r="2.4" fill="currentColor"/>
+      <circle cx="37" cy="13" r="2.4" fill="currentColor"/></svg>`,
+  bingo: `<svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="3">
+      <circle cx="22" cy="13" r="6" fill="currentColor" fill-opacity=".16"/>
+      <circle cx="33" cy="20" r="6" fill="currentColor" fill-opacity=".16"/>
+      <circle cx="29" cy="32" r="6" fill="currentColor" fill-opacity=".16"/>
+      <circle cx="15" cy="32" r="6" fill="currentColor" fill-opacity=".16"/>
+      <circle cx="11" cy="20" r="6" fill="currentColor" fill-opacity=".16"/>
+      <circle cx="22" cy="23" r="4.4" fill="currentColor"/></svg>`
+};
+
 // 角色：每人一屏
 let cardN = 0;
 document.getElementById('charSlides').innerHTML = CHARS.map((c) => `
-  <section class="slide slide--char" data-accent="${c.accent}" data-tint="${c.tint}"
+  <section class="slide slide--char" data-key="${c.key}" data-accent="${c.accent}" data-tint="${c.tint}"
     style="--accent:${c.accent};--tint:${c.tint}">
     <article class="card">
       <div class="card__top">
@@ -764,7 +832,9 @@ document.getElementById('charSlides').innerHTML = CHARS.map((c) => `
           <span class="halo__ring"></span>
           <span class="halo__ring halo__ring--2"></span>
         </div>
+        <span class="card__motif" aria-hidden="true">${MOTIF[c.key]}</span>
         ${dogSVG(c, '', 'card-' + c.key)}
+        <span class="card__prop" aria-hidden="true">${PROP[c.key]}</span>
       </div>
       <div class="card__body">
         <h3 class="card__name">${c.name}<span class="card__latin">${c.latin}</span></h3>
@@ -1610,10 +1680,16 @@ const bushSVG = `<svg viewBox="0 0 56 74" aria-hidden="true">
 /* ---- 气球不落地 ---- */
 function gameBalloon(stage){
   stage.innerHTML = `<div class="b-count" id="bCount">0</div>
-    <div class="b-balloon" id="bBalloon">${balloonSVG}</div>
-    <div class="b-ground"></div>`;
+    <div class="b-ground"></div>
+    <div class="b-follow" id="bFollow">
+      <div class="g-dog" id="bDog">${dogSVG(byKey('bluey'), '', 'g-balloon')}</div>
+    </div>
+    <div class="b-balloon" id="bBalloon">${balloonSVG}</div>`;
   const el = stage.querySelector('#bBalloon');
   const cnt = stage.querySelector('#bCount');
+  const follow = stage.querySelector('#bFollow');
+  const dog = stage.querySelector('#bDog');
+  follow.style.transform = `translateX(${stage.clientWidth / 2 - 48}px)`;
   const W = stage.clientWidth, H = stage.clientHeight, R = 34;
   let x = W / 2, y = H * .46, vx = 72, vy = -300, score = 0, dead = false, raf = 0;
   let last = performance.now(), ready = false;
@@ -1646,6 +1722,8 @@ function gameBalloon(stage){
     vx += (px - x) * .9;
     score++;
     cnt.textContent = score;
+    follow.style.transform = `translateX(${x - 48}px)`;
+    dog.classList.remove('is-hop'); void dog.offsetWidth; dog.classList.add('is-hop');
     Music.blip([79 + (score % 5)], 0, .18, .2);
   };
 
@@ -1664,20 +1742,31 @@ function gameBalloon(stage){
 /* ---- 魔法木琴（听音跟敲） ---- */
 function gameXylo(stage){
   const NOTES = [72, 74, 76, 79, 81];
-  stage.innerHTML = `<div class="x-say" id="xSay">听我敲一遍…</div>
+  stage.innerHTML = `<div class="x-dogs">${CHARS.map((c, i) => `
+      <div class="x-dog"><div class="g-dog">${dogSVG(c, '', 'gx-' + i)}</div></div>`).join('')}</div>
+    <div class="x-say" id="xSay">听我敲一遍…</div>
     <div class="x-keys">${NOTES.map((n,i) => `
       <button class="x-key" data-i="${i}" type="button" style="--h:${96 - i*13}%"><i></i></button>`).join('')}</div>`;
   const say = stage.querySelector('#xSay');
   const keys = [...stage.querySelectorAll('.x-key')];
+  const dogs = [...stage.querySelectorAll('.x-dog')];
   let seq = [], step = 0, round = 1, playing = false, dead = false;
   const timers = [];
   const T = (fn, ms) => { timers.push(setTimeout(fn, ms)); };
 
+  const hop = (el) => {
+    if(!el) return;
+    el.classList.remove('is-hop'); void el.offsetWidth; el.classList.add('is-hop');
+  };
   const flash = (i) => {
     keys[i].classList.add('is-hit');
     T(() => keys[i].classList.remove('is-hit'), 170);
   };
-  const note = (i) => { flash(i); Music.blip([NOTES[i]], 0, .4, .22); };
+  const note = (i) => {
+    flash(i);
+    hop(dogs[i % dogs.length] && dogs[i % dogs.length].querySelector('.g-dog'));
+    Music.blip([NOTES[i]], 0, .4, .22);
+  };
 
   const playSeq = (done) => {
     playing = true;
@@ -1712,6 +1801,10 @@ function gameXylo(stage){
     } else {
       say.textContent = '错啦，再听一遍';
       step = 0;
+      dogs.forEach(d => {
+        const el = d.querySelector('.g-dog');
+        el.classList.remove('is-shake'); void el.offsetWidth; el.classList.add('is-shake');
+      });
       T(() => playSeq(() => { say.textContent = '轮到你了'; }), 700);
     }
   };
@@ -1724,9 +1817,11 @@ function gameXylo(stage){
 /* ---- 纸箱飞船（蓄力起飞） ---- */
 function gameRocket(stage){
   stage.innerHTML = `<div class="r-tip" id="rTip">按住蓄力</div>
+    <div class="r-bandit"><div class="g-dog" id="rDog">${dogSVG(byKey('bandit'), '', 'g-rocket')}</div></div>
     <div class="r-rocket" id="rRocket">${rocketSVG}</div>
     <div class="r-meter"><i id="rFill"></i></div>`;
   const rocket = stage.querySelector('#rRocket');
+  const rDog = stage.querySelector('#rDog');
   const fill = stage.querySelector('#rFill');
   const tip = stage.querySelector('#rTip');
   let charging = false, charge = 0, raf = 0, last = 0, flying = false;
@@ -1759,6 +1854,7 @@ function gameRocket(stage){
     rocket.style.transition = 'transform .75s cubic-bezier(.2,.85,.3,1)';
     rocket.style.transform = `translateY(${-dist}px) scale(${1 + charge * .1})`;
     Music.blip([48 + Math.round(charge * 14)], 0, .9, .18);
+    rDog.classList.remove('is-hop'); void rDog.offsetWidth; rDog.classList.add('is-hop');
     playScore.textContent = `${Math.round(charge * 100)} 米`;
     tip.textContent = charge > .9 ? '冲出屋顶了！' : '再高一点？';
     setTimeout(() => {
@@ -1776,7 +1872,8 @@ function gameRocket(stage){
 /* ---- 捉迷藏 ---- */
 function gameHide(stage){
   const N = 5;
-  stage.innerHTML = `<div class="h-sky">
+  stage.innerHTML = `<div class="h-bluey"><div class="g-dog" id="hDog">${dogSVG(byKey('bluey'), '', 'g-hide')}</div></div>
+    <div class="h-sky">
       <span class="h-sun"></span>
       <span class="h-cloud"></span><span class="h-cloud h-cloud--2"></span>
     </div>
@@ -1788,6 +1885,7 @@ function gameHide(stage){
       </button>`).join('')}</div>`;
   const msg = stage.querySelector('#hMsg');
   const bushes = [...stage.querySelectorAll('.h-bush')];
+  const hDog = stage.querySelector('#hDog');
   let round = 1, hidden = Math.floor(Math.random() * N), dead = false, lock = false;
 
   const tap = (e) => {
@@ -1795,6 +1893,7 @@ function gameHide(stage){
     if(!b || dead || lock || b.classList.contains('is-open')) return;
     if(+b.dataset.i === hidden){
       b.classList.add('is-open');
+      hDog.classList.remove('is-hop'); void hDog.offsetWidth; hDog.classList.add('is-hop');
       Music.blip([84,88], .08, .3, .2);
       if(round >= 3){
         dead = true;
@@ -1829,7 +1928,7 @@ const PLAY = {
   hide:    { title:'捉迷藏',     hint:'点草丛找宾果，一共三轮', start: gameHide }
 };
 
-function openGame(key){
+function mountGame(key){
   const def = PLAY[key];
   if(!def) return;
   if(cleanupGame){ cleanupGame(); cleanupGame = null; }
@@ -1838,10 +1937,15 @@ function openGame(key){
   playHint.textContent = def.hint;
   playScore.textContent = '';
   playStage.innerHTML = '';
+  cleanupGame = def.start(playStage) || null;
+}
+
+function openGame(key){
+  if(!PLAY[key]) return;
+  mountGame(key);
   playEl.classList.add('is-on');
   playEl.setAttribute('aria-hidden', 'false');
   Music.blip([79, 84], .06, .3, .14);
-  cleanupGame = def.start(playStage) || null;
 }
 
 function closeGame(){
@@ -1852,11 +1956,15 @@ function closeGame(){
 }
 
 document.getElementById('playClose').addEventListener('click', closeGame);
+/* 再来一次：只是把这一局的场景重置，浮层不动 */
 document.getElementById('playAgain').addEventListener('click', () => {
   if(!currentKey) return;
   const k = currentKey;
-  closeGame();
-  setTimeout(() => openGame(k), 220);
+  mountGame(k);
+  playStage.animate?.(
+    [{ opacity: .35, transform: 'scale(.985)' }, { opacity: 1, transform: 'scale(1)' }],
+    { duration: 260, easing: 'cubic-bezier(.22,.9,.24,1)' }
+  );
 });
 window.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeGame(); });
 window.openGame = openGame;
