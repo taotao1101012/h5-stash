@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>H5 Stash</title>
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:radial-gradient(120% 80% at 50% -10%, #FFFDF9 0%, #FFF6E9 45%, #FBE9D5 100%);
+    color:#2A2019;
+    font-family:"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:clamp(28px,6vw,72px) clamp(20px,5vw,40px) 60px;
+  }
+  .wrap{max-width:1000px;margin:0 auto;}
+  .eyebrow{margin:0;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:rgba(42,32,25,.42);font-weight:600;}
+  h1{margin:14px 0 0;font-size:clamp(28px,5vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1.15;}
+  .sub{margin:14px 0 0;font-size:14px;line-height:1.75;color:rgba(42,32,25,.6);}
+  .grid{
+    margin-top:clamp(28px,5vw,48px);
+    display:grid;gap:clamp(16px,2.4vw,26px);
+    grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));
+  }
+  .card{
+    display:flex;flex-direction:column;overflow:hidden;text-decoration:none;color:inherit;
+    background:#FFFDFA;border-radius:22px;
+    box-shadow:0 0 0 1px rgba(74,48,26,.06), 0 22px 40px -28px rgba(74,48,26,.5);
+    transition:transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s cubic-bezier(.2,.8,.2,1);
+  }
+  .card:hover,.card:focus-visible{
+    transform:translateY(-6px);
+    box-shadow:0 0 0 1px rgba(74,48,26,.09), 0 34px 54px -30px rgba(74,48,26,.55);
+    outline:none;
+  }
+  .thumb{position:relative;aspect-ratio:4/5;overflow:hidden;background:#F6E7D5;}
+  .thumb img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;
+    transition:transform .7s cubic-bezier(.2,.8,.2,1);}
+  .card:hover .thumb img{transform:scale(1.04);}
+  .meta{padding:16px 18px 20px;display:flex;flex-direction:column;gap:6px;}
+  .meta h2{margin:0;font-size:16.5px;font-weight:800;letter-spacing:-.02em;line-height:1.3;}
+  .meta p{margin:0;font-size:12px;line-height:1.6;color:rgba(42,32,25,.52);}
+  .meta span{margin-top:8px;font-size:11.5px;font-weight:600;color:#C4562F;letter-spacing:.06em;}
+  footer{margin-top:clamp(36px,6vw,60px);font-size:11.5px;line-height:1.8;color:rgba(42,32,25,.34);letter-spacing:.02em;}
+  footer a{color:inherit;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">H5 Stash</p>
+  <h1>随手攒的几个 H5</h1>
+  <p class="sub">单文件、零外部依赖，双击就能跑；手机上打开效果最好。</p>
+
+  <main class="grid">
+    <a class="card" href="bluey-family/">
+      <div class="thumb"><img src="bluey-family/preview-hero.jpg" alt="布鲁伊 · 一家四口" /></div>
+      <div class="meta">
+        <h2>布鲁伊 · 一家四口</h2>
+        <p>角色图鉴 · 四张卡 + 一家四口合集</p>
+        <span>二年级八班 刘欣宁</span>
+      </div>
+    </a>
+
+    <a class="card" href="peppa-family/">
+      <div class="thumb"><img src="peppa-family/preview-hero.jpg" alt="小猪佩奇 · 我们这一家" /></div>
+      <div class="meta">
+        <h2>小猪佩奇 · 我们这一家</h2>
+        <p>粉色一家人的角色页</p>
+        <span>H5</span>
+      </div>
+    </a>
+
+    <a class="card" href="wedding/">
+      <div class="thumb"><img src="wedding/preview-hero.jpg" alt="屿 · 晚 — 婚礼邀请函" /></div>
+      <div class="meta">
+        <h2>屿 · 晚</h2>
+        <p>婚礼邀请函</p>
+        <span>Invitation</span>
+      </div>
+    </a>
+  </main>
+
+  <footer>
+    GitHub Pages 托管 · <a href="https://github.com/taotao1101012/h5-stash">taotao1101012/h5-stash</a>
+  </footer>
+</div>
+</body>
+</html>
