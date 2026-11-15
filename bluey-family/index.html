@@ -2282,8 +2282,8 @@ const hasTTS = 'speechSynthesis' in window;
 
 /* 挑一个最自然的中文音色：优先婷婷 / 美嘉，避开系统里的"趣味音色" */
 const VOICE_RANK = [
-  /Ting-?Ting|婷婷|Tingting|Enhanced|Premium/i,
-  /Mei-?Jia|美嘉/i,
+  /婷婷.*(增强|高级)|Ting-?Ting.*(Enhanced|Premium)|Enhanced|Premium|增强/i,
+  /美嘉|Mei-?Jia/i,
   /Xiaoxiao|晓晓|Yunxi|云希|Huihui|慧慧|Yaoyao|瑶瑶/i,
   /Google.*(普通话|Mandarin|中文)/i
 ];
@@ -2300,6 +2300,7 @@ function pickVoice(){
       best = vs.find(v => re.test(v.name) && !NOVELTY.test(v.name));
       if(best) break;
     }
+    if(!best) best = vs.find(v => !NOVELTY.test(v.name) && /增强|增强|Premium|Enhanced/i.test(v.name));
     if(!best) best = vs.find(v => !NOVELTY.test(v.name) && /zh[-_]CN/i.test(v.lang));
     if(!best) best = vs.find(v => !NOVELTY.test(v.name));
     zhVoice = best || vs[0];
