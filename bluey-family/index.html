@@ -205,6 +205,22 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
 .card__prop{position:absolute;right:11%;bottom:7%;width:46px;color:var(--accent);z-index:3;
   pointer-events:none;animation:propBob 4.6s ease-in-out infinite;}
 .card__prop svg{width:100%;height:auto;display:block;}
+.card__art{cursor:pointer;}
+.card__art.is-talk > svg{animation:cardBounce .44s cubic-bezier(.3,.9,.35,1);}
+@keyframes cardBounce{0%,100%{transform:translateY(0)}36%{transform:translateY(-12px)}70%{transform:translateY(0)}}
+.art-hint{position:absolute;left:50%;bottom:1%;transform:translateX(-50%);z-index:4;
+  font-size:10px;letter-spacing:.14em;color:var(--ink-3);white-space:nowrap;
+  animation:hintPulse 3.6s ease-in-out infinite;transition:opacity .35s var(--ease);}
+.art-hint.is-off{opacity:0;}
+@keyframes hintPulse{0%,100%{opacity:.4}50%{opacity:.85}}
+.say{position:absolute;left:50%;top:8%;transform:translate(-50%,8px) scale(.94);z-index:6;
+  max-width:78%;padding:10px 15px;border-radius:16px 16px 16px 5px;
+  background:var(--tint);color:var(--accent);font-size:12.5px;font-weight:700;line-height:1.65;
+  box-shadow:0 14px 28px -18px rgba(74,48,26,.55);opacity:0;pointer-events:none;
+  transition:opacity .26s var(--ease), transform .36s cubic-bezier(.2,1.1,.3,1);}
+.say::after{content:"";position:absolute;left:22px;bottom:-8px;width:0;height:0;
+  border:8px solid transparent;border-top-color:var(--tint);border-bottom:0;}
+.say.is-on{opacity:1;transform:translate(-50%,0) scale(1);}
 @keyframes propBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(-5deg)}}
 /* 光环也各有各的样子 */
 .slide--char[data-key="chilli"] .halo__ring{border-style:solid;opacity:.15;}
@@ -272,6 +288,14 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
   background:rgba(42,32,25,.20);transition:.4s var(--ease);}
 .pager button.is-on{height:20px;background:var(--accent);}
 
+.song{position:absolute;top:calc(14px + env(safe-area-inset-top));right:60px;z-index:50;
+  display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;
+  border:1px solid rgba(42,32,25,.09);background:rgba(255,255,255,.72);color:var(--ink-2);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  font-family:inherit;font-size:11.5px;font-weight:700;letter-spacing:.02em;cursor:pointer;
+  box-shadow:0 4px 14px rgba(96,62,30,.10);transition:transform .16s var(--ease), color .2s var(--ease);}
+.song:active{transform:scale(.95);}
+.song__note{color:var(--accent);font-size:12px;line-height:1;}
 .sound{position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;z-index:50;
   width:38px;height:38px;border-radius:50%;border:1px solid rgba(42,32,25,.09);
   background:rgba(255,255,255,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
@@ -609,6 +633,11 @@ button, .arrow, .dot, .kbd{touch-action:manipulation;}
   <div class="flash" id="flash" aria-hidden="true"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <button class="song" id="songBtn" type="button" aria-label="切换音乐">
+    <span class="song__note" aria-hidden="true">♪</span>
+    <span class="song__name" id="songName">八音盒</span>
+  </button>
+
   <button class="sound" id="soundBtn" type="button" aria-label="开关音乐" aria-pressed="false">
     <span class="sound__bars"><i></i><i></i><i></i></span>
   </button>
@@ -866,6 +895,7 @@ document.getElementById('charSlides').innerHTML = CHARS.map((c) => `
         <span class="card__motif" aria-hidden="true">${MOTIF[c.key]}</span>
         ${dogSVG(c, '', 'card-' + c.key)}
         <span class="card__prop" aria-hidden="true">${PROP[c.key]}</span>
+        <span class="art-hint">点它 · 会说话</span>
       </div>
       <div class="card__body">
         <h3 class="card__name">${c.name}<span class="card__latin">${c.latin}</span></h3>
@@ -1151,30 +1181,46 @@ document.getElementById('famStage').innerHTML = sceneSVG;
    ============================================================ */
 const NOTE = m => 440 * Math.pow(2, (m - 69) / 12);
 
-// I – vi – IV – V（C 大调），温暖、循环
-const CHORDS = [
-  { root:48, tones:[48,55,60,64] },
-  { root:45, tones:[45,52,57,61] },
-  { root:41, tones:[41,48,53,57] },
-  { root:43, tones:[43,50,55,59] }
+// 三首曲子：同一套调度器，换调式、换音色、换速度
+const SONGS = [
+  {
+    id:'box', name:'八音盒', bpm:74, timbre:'bell', pad:true, shaker:false,
+    chords:[{root:48,tones:[48,55,60,64]},{root:45,tones:[45,52,57,61]},
+            {root:41,tones:[41,48,53,57]},{root:43,tones:[43,50,55,59]}],
+    arp:[0,2,3,2,1,3,2,1],
+    melody:{0:[76,2,.34],2:[79,2,.30],4:[81,4,.36],8:[79,2,.30],10:[76,2,.27],12:[74,4,.31],
+            16:[72,2,.30],18:[76,2,.27],20:[81,4,.34],24:[79,4,.32],28:[76,4,.28],
+            32:[77,2,.31],34:[81,2,.27],36:[84,4,.33],40:[81,2,.30],42:[79,2,.27],44:[77,4,.29],
+            48:[74,2,.27],50:[76,2,.27],52:[79,4,.31],56:[72,8,.32]}
+  },
+  {
+    id:'uke', name:'尤克里里', bpm:92, timbre:'pluck', pad:false, shaker:false,
+    chords:[{root:55,tones:[55,62,67,71]},{root:52,tones:[52,59,64,67]},
+            {root:48,tones:[48,55,60,64]},{root:50,tones:[50,57,62,66]}],
+    arp:[0,2,1,3,2,1,3,2],
+    melody:{0:[74,2,.30],2:[76,2,.26],4:[79,4,.32],8:[78,2,.28],10:[76,2,.25],12:[74,4,.29],
+            16:[72,2,.27],18:[74,2,.25],20:[76,4,.30],24:[74,8,.28],
+            32:[71,2,.27],34:[74,2,.25],36:[79,4,.31],40:[81,2,.27],42:[79,2,.25],44:[76,4,.28],
+            48:[74,2,.25],50:[76,2,.25],52:[78,4,.29],56:[79,8,.30]}
+  },
+  {
+    id:'xylo', name:'木琴', bpm:108, timbre:'marimba', pad:false, shaker:true,
+    chords:[{root:41,tones:[53,60,65,69]},{root:38,tones:[50,57,62,65]},
+            {root:46,tones:[46,53,58,62]},{root:48,tones:[48,55,60,64]}],
+    arp:[0,1,2,3,2,1,3,2],
+    melody:{0:[77,1,.28],1:[81,1,.24],2:[84,2,.30],4:[81,2,.26],6:[77,2,.25],
+            8:[79,1,.26],9:[81,1,.24],10:[82,2,.30],12:[81,4,.27],
+            16:[74,2,.26],18:[77,2,.25],20:[82,4,.30],24:[81,4,.28],28:[77,4,.26],
+            32:[72,1,.26],33:[77,1,.24],34:[81,2,.29],36:[79,2,.26],38:[77,2,.25],
+            40:[82,2,.28],42:[81,2,.26],44:[79,4,.27],
+            48:[81,1,.26],49:[82,1,.24],50:[84,2,.29],52:[82,2,.26],54:[81,2,.25],
+            56:[77,8,.30]}
+  }
 ];
-const ARP = [0,2,3,2,1,3,2,1];
-
-// 主旋律：step -> [midi, 时值(八分), 力度]
-const MELODY = {
-  0:[76,2,.34], 2:[79,2,.30], 4:[81,4,.36],
-  8:[79,2,.30], 10:[76,2,.27], 12:[74,4,.31],
-  16:[72,2,.30], 18:[76,2,.27], 20:[81,4,.34],
-  24:[79,4,.32], 28:[76,4,.28],
-  32:[77,2,.31], 34:[81,2,.27], 36:[84,4,.33],
-  40:[81,2,.30], 42:[79,2,.27], 44:[77,4,.29],
-  48:[74,2,.27], 50:[76,2,.27], 52:[79,4,.31],
-  56:[72,8,.32]
-};
 
 const Music = {
   ctx:null, master:null, dry:null, send:null, verb:null,
-  playing:false, muted:false, step:0, nextT:0, timer:null, bpm:74,
+  playing:false, muted:false, step:0, nextT:0, timer:null, songIndex:0,
 
   init(){
     if(this.ctx) return;
@@ -1200,6 +1246,12 @@ const Music = {
     this.send = c.createGain();
     this.send.gain.value = 1;
     this.send.connect(this.verb);
+
+    // 沙锤用的噪声（只生成一次）
+    const nlen = Math.floor(c.sampleRate * .09);
+    this.noise = c.createBuffer(1, nlen, c.sampleRate);
+    const nd = this.noise.getChannelData(0);
+    for(let i = 0; i < nlen; i++) nd[i] = (Math.random()*2-1) * Math.pow(1 - i/nlen, 3);
   },
 
   impulse(dur, decay){
@@ -1221,25 +1273,73 @@ const Music = {
     const g = c.createGain();
     const peak = vel * .5;
     g.gain.setValueAtTime(0.0001, when);
-    g.gain.exponentialRampToValueAtTime(peak, when + .012);
+    g.gain.exponentialRampToValueAtTime(peak, when + (kind === 'pluck' ? .004 : .012));
     g.gain.exponentialRampToValueAtTime(0.0004, when + Math.max(dur, .2));
 
-    const parts = kind === 'sine'
-      ? [[f,1]]
-      : [[f,1],[f*2.002,.26],[f*3.01,.07]];
+    const parts = kind === 'pluck'   ? [[f,1],[f*1.004,.55]]
+                : kind === 'marimba' ? [[f,1],[f*4.01,.16]]
+                : kind === 'voice'   ? [[f,1],[f*2.01,.18]]
+                : kind === 'sine'    ? [[f,1]]
+                : [[f,1],[f*2.002,.26],[f*3.01,.07]];
+
+    const bus = c.createGain();
+    if(kind === 'pluck'){
+      const lp = c.createBiquadFilter();
+      lp.type = 'lowpass'; lp.frequency.value = 2400; lp.Q.value = .6;
+      bus.connect(lp); lp.connect(g);
+    } else if(kind === 'voice'){
+      const bp = c.createBiquadFilter();
+      bp.type = 'bandpass'; bp.frequency.value = 950; bp.Q.value = 1.1;
+      bus.connect(bp); bp.connect(g);
+    } else {
+      bus.connect(g);
+    }
 
     parts.forEach(([freq, amp]) => {
       const o = c.createOscillator();
-      o.type = 'sine';
+      o.type = (kind === 'pluck' || kind === 'voice') ? 'sawtooth' : 'sine';
       o.frequency.value = freq;
       const gn = c.createGain();
       gn.gain.value = amp;
-      o.connect(gn); gn.connect(g);
+      o.connect(gn); gn.connect(bus);
       o.start(when); o.stop(when + dur + .12);
     });
 
     g.connect(this.dry);
     g.connect(this.send);
+  },
+
+  sing(midis, step = .26){
+    if(!this.ctx || this.muted) return;
+    const t0 = this.ctx.currentTime + .02;
+    midis.forEach((m, i) => this.tone(m, t0 + i * step, step * 1.7, .3, 'voice'));
+  },
+
+  duck(on){
+    if(!this.ctx) return;
+    this.master.gain.setTargetAtTime(on ? .07 : (this.muted ? 0 : .5), this.ctx.currentTime, .18);
+  },
+
+  babble(count = 5, base = 74){
+    if(!this.ctx || this.muted) return;
+    const t0 = this.ctx.currentTime + .02;
+    for(let i = 0; i < count; i++){
+      const n = base + (i % 3) * 3 + (i > 2 ? 5 : 0);
+      this.tone(n, t0 + i * .1, .16, .22, 'voice');
+    }
+  },
+
+  shaker(when, vel){
+    const c = this.ctx;
+    if(!c || !this.noise) return;
+    const src = c.createBufferSource();
+    src.buffer = this.noise;
+    const hp = c.createBiquadFilter();
+    hp.type = 'highpass'; hp.frequency.value = 5200;
+    const g = c.createGain();
+    g.gain.value = vel;
+    src.connect(hp); hp.connect(g); g.connect(this.dry);
+    src.start(when);
   },
 
   pad(chord, when){
@@ -1262,27 +1362,43 @@ const Music = {
     g.connect(this.send);
   },
 
-  stepDur(){ return 60 / this.bpm / 2; },
+  song(){ return SONGS[this.songIndex] || SONGS[0]; },
+  stepDur(){ return 60 / this.song().bpm / 2; },
+  setSong(i){
+    this.songIndex = ((i % SONGS.length) + SONGS.length) % SONGS.length;
+    if(this.playing && this.ctx){
+      this.step = 0;
+      this.nextT = this.ctx.currentTime + .4;
+    }
+    return this.song();
+  },
+  nextSong(){ return this.setSong(this.songIndex + 1); },
 
   scheduleStep(step, t){
+    const S = this.song();
     const sd = this.stepDur();
     const bar = Math.floor(step / 8);
     const beat = step % 8;
-    const chord = CHORDS[bar % 4];
+    const chord = S.chords[bar % S.chords.length];
+    const arp = S.arp || [0,2,3,2,1,3,2,1];
+    const noteLen = S.timbre === 'pluck' ? sd * 2.4 : (S.timbre === 'marimba' ? sd * 2.8 : sd * 6.5);
 
-    // 琶音（音乐盒）
-    this.tone(chord.tones[ARP[beat]], t, sd * 6.5, beat % 2 ? .16 : .22);
+    // 琶音
+    this.tone(chord.tones[arp[beat]], t, noteLen, beat % 2 ? .16 : .22, S.timbre);
 
     // 低音
     if(beat === 0) this.tone(chord.root - 12, t, 2.2, .17, 'sine');
     if(beat === 4) this.tone(chord.root - 5, t, 1.6, .10, 'sine');
 
     // 铺底
-    if(beat === 0) this.pad(chord, t);
+    if(S.pad && beat === 0) this.pad(chord, t);
+
+    // 沙锤
+    if(S.shaker && (beat === 2 || beat === 6)) this.shaker(t, .055);
 
     // 主旋律
-    const m = MELODY[step];
-    if(m) this.tone(m[0], t, sd * m[1], m[2]);
+    const m = S.melody[step];
+    if(m) this.tone(m[0], t, sd * m[1], m[2], S.timbre);
   },
 
   tick(){
@@ -1359,7 +1475,7 @@ const root = document.documentElement;
 let slideIdx = 0;
 let slideW = 0;
 let dragging = false, dragStartX = 0, dragDX = 0, dragBase = 0, dragT0 = 0;
-let tapEl = null;
+let tapEl = null, tapChar = null;
 
 /* 合集入场的 SMIL 触发（避开 SVG 分组上的 CSS transform） */
 function playFamilyRise(){
@@ -1456,6 +1572,7 @@ appEl.addEventListener('pointerdown', (e) => {
   dragT0 = performance.now();
   dragBase = -slideIdx * slideW;
   tapEl = e.target.closest('.game');
+  tapChar = e.target.closest('.card__art');
   deck.style.transition = 'none';
   try { appEl.setPointerCapture(e.pointerId); } catch(err){}
 });
@@ -1478,10 +1595,12 @@ function endDrag(){
   if(fast || far) next = slideIdx + (dragDX < 0 ? 1 : -1);
   goSlide(next, { animate: true, force: true });
   // 没怎么动就是"轻点"：打开对应的小游戏
-  if(tapEl && Math.abs(dragDX) < 10){
-    window.openGame && window.openGame(tapEl.dataset.key);
+  if(Math.abs(dragDX) < 10){
+    if(tapEl) window.openGame && window.openGame(tapEl.dataset.key);
+    else if(tapChar) charTap(tapChar);
   }
   tapEl = null;
+  tapChar = null;
   dragDX = 0;
 }
 appEl.addEventListener('pointerup', endDrag);
@@ -1510,6 +1629,30 @@ document.getElementById('startBtn').addEventListener('click', () => {
   sb.classList.add('is-on');
   sb.setAttribute('aria-pressed', 'true');
   goSlide(1);
+});
+
+// 曲子切换
+const songBtn = document.getElementById('songBtn');
+const songName = document.getElementById('songName');
+songName.textContent = Music.song().name;
+songBtn.addEventListener('click', () => {
+  if(!Music.playing){
+    Music.start();
+    const sb = document.getElementById('soundBtn');
+    sb.classList.add('is-on');
+    sb.setAttribute('aria-pressed', 'true');
+    songName.textContent = Music.song().name;
+    return;
+  }
+  const s = Music.nextSong();
+  songName.textContent = s.name;
+  try {
+    songName.animate(
+      [{ opacity: .1, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }],
+      { duration: 300, easing: 'cubic-bezier(.22,.9,.24,1)' }
+    );
+  } catch(e){}
+  Music.chime([84], .06, .1);
 });
 
 // 声音按钮
@@ -2056,6 +2199,103 @@ document.getElementById('playAgain').addEventListener('click', () => {
 });
 window.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeGame(); });
 window.openGame = openGame;
+
+
+/* ============================================================
+   7. 点角色：先说一句，再唱一句
+   ============================================================ */
+const SAY = {
+  bandit: { pitch: .78, rate: .95, sing: [55, 57, 60, 55], base: 60 },
+  chilli: { pitch: 1.02, rate: .98, sing: [64, 67, 69, 64], base: 67 },
+  bluey:  { pitch: 1.32, rate: 1.08, sing: [72, 74, 76, 72], base: 74 },
+  bingo:  { pitch: 1.50, rate: 1.14, sing: [76, 79, 81, 76], base: 79 }
+};
+
+const hasTTS = 'speechSynthesis' in window;
+let zhVoice = null;
+function pickVoice(){
+  if(!hasTTS) return;
+  try{
+    const vs = speechSynthesis.getVoices() || [];
+    zhVoice = vs.find(v => /^zh/i.test(v.lang)) || vs.find(v => /chinese|中文|普通话/i.test(v.name)) || null;
+  }catch(e){}
+}
+if(hasTTS){
+  pickVoice();
+  try { speechSynthesis.addEventListener('voiceschanged', pickVoice); } catch(e){}
+}
+
+const saidOnce = new Set();
+let sayTimer = 0;
+
+function getBubble(art){
+  let b = art.querySelector('.say');
+  if(!b){
+    b = document.createElement('div');
+    b.className = 'say';
+    b.setAttribute('aria-live', 'polite');
+    art.appendChild(b);
+  }
+  return b;
+}
+
+function speakLine(text, cfg){
+  if(!hasTTS) return false;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'zh-CN';
+    u.pitch = cfg.pitch;
+    u.rate = cfg.rate;
+    u.volume = .95;
+    if(zhVoice) u.voice = zhVoice;
+    u.onstart = () => Music.duck(true);
+    u.onend = () => Music.duck(false);
+    u.onerror = () => Music.duck(false);
+    setTimeout(() => { try { speechSynthesis.speak(u); } catch(e){} }, 70);
+    setTimeout(() => Music.duck(false), 4600);
+    return !zhVoice ? !!speechSynthesis.getVoices().length : true;
+  }catch(e){ return false; }
+}
+
+function charTap(art){
+  const slide = art.closest('.slide');
+  const key = slide && slide.dataset.key;
+  if(!key) return;
+  const c = byKey(key);
+  const cfg = SAY[key] || SAY.bluey;
+  const bubble = getBubble(art);
+  const talking = art.dataset.say === '1';
+
+  clearTimeout(sayTimer);
+  art.classList.remove('is-talk');
+  void art.offsetWidth;
+  art.classList.add('is-talk');
+
+  if(!talking){
+    art.dataset.say = '1';
+    bubble.textContent = c.quote;
+    if(!speakLine(c.quote.replace(/[「」]/g, ''), cfg)) Music.babble(5, cfg.base);
+  } else {
+    art.dataset.say = '0';
+    bubble.textContent = '♪ 啦啦啦～';
+    Music.sing(cfg.sing);
+    Music.duck(true);
+    setTimeout(() => Music.duck(false), 1600);
+  }
+  bubble.classList.add('is-on');
+
+  if(!saidOnce.has(key)){
+    saidOnce.add(key);
+    const hint = art.querySelector('.art-hint');
+    if(hint) hint.classList.add('is-off');
+  }
+
+  sayTimer = setTimeout(() => {
+    bubble.classList.remove('is-on');
+    art.dataset.say = '0';
+  }, 4800);
+}
 
 /* 初始化 */
 measure();
