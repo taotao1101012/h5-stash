@@ -1,11 +1,12 @@
 # h5-stash
 
-两个单文件、零外部依赖的 H5 作品，暂存在这里。
+三个单文件、零外部依赖的 H5 作品，暂存在这里。
 
 | 目录 | 作品 | 首屏 |
 |---|---|---|
 | [`peppa-family/`](peppa-family/) | 小猪佩奇 · 我们这一家 | ![佩奇](peppa-family/preview-hero.jpg) |
 | [`bluey-family/`](bluey-family/) | 布鲁伊 · 一家四口（二年级八班 刘欣宁） | ![布鲁伊](bluey-family/preview-hero.jpg) |
+| [`past-tense-lesson/`](past-tense-lesson/) | 英语语法 · 一般过去时 × 过去进行时（带朗读） | ![语法课](past-tense-lesson/preview-hero.jpg) |
 
 ## 预览
 
@@ -16,6 +17,7 @@ python3 -m http.server 8000
 
 - 佩奇：http://localhost:8000/peppa-family/
 - 布鲁伊：http://localhost:8000/bluey-family/
+- 语法课：http://localhost:8000/past-tense-lesson/
 
 也可以直接双击各目录下的 `index.html`（`file://` 下分享/返回按钮行为可能不完整）。
 
